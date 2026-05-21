@@ -1,0 +1,264 @@
+# client-config.yaml — DRAFT for Sulfur Recovery Engineering Inc. (SRE)
+# ---------------------------------------------------------------------
+# Pre-filled from `SRE Claude Routines - Execution Plan.md` + industry context.
+# Source-of-truth file every audit stage reads.
+# Each `# 🟢/🟡/🔴` tag marks how the value was derived (see 00-discovery-questionnaire.md):
+#   🟢 CONFIRMED from Execution Plan
+#   🟡 INFERRED — review with Maaz
+#   🔴 NEEDS MAAZ — placeholder, must be replaced before run
+#
+# After Maaz review, rename this file to `client-config.yaml` and remove this header block.
+
+client: sulfur-recovery-engineering          # 🟢
+client_slug: sre                              # 🟢
+audit_date: 2026-05-21                        # 🟢 (today)
+operator_name: "Maaz Ahmed Shareef"          # 🟢
+
+# ============================================================
+# 1. TENANT + IDENTITY
+# ============================================================
+tenant:
+  primary_domain: "REPLACE_ME.com"            # 🔴  e.g. sulfurrecovery.com
+  internal_personal_aliases: []               # 🔴  if any staff use personal addresses for SRE work
+
+in_scope_mailboxes_full:                      # full mailbox + calendar reads
+  - "maaz@REPLACE_ME.com"                     # 🟢
+
+in_scope_users_metadata:                      # directory-only, no bodies
+  # 🟡 — derived from Execution Plan; populate UPN after stage 1 enumeration
+  - { displayName: "Maaz Ahmed Shareef", role: "CEO/GM" }
+  - { displayName: "Zaheer Juddy",        role: "Group CEO / Shareholder",        is_external: true }
+  - { displayName: "Ashley",              role: "Admin / HR / bank" }
+  - { displayName: "Talha",               role: "ME technical / conferences" }
+  - { displayName: "Dharmesh",            role: "Engineering" }
+  - { displayName: "Utsav",               role: "Technical writing" }
+  - { displayName: "Inshan",              role: "Qatar/Kuwait compliance" }
+  - { displayName: "Ron",                 role: "BD / clients (NA)" }
+
+aims_partners:                                # AIMS members (likely tenant guests OR external)
+  # 🟢
+  - { name: "Shameem", note: "AIMS lead contact" }
+  - { name: "Naveed" }
+  - { name: "Zaheer Juddy", note: "also Group CEO/Shareholder" }
+  - { name: "Ali" }
+  - { name: "Aslam" }
+  - { name: "Fazal" }
+  - { name: "Majid" }
+
+shared_mailboxes: []                          # 🔴  e.g. [ar@..., info@..., tenders@...]
+
+excluded_users: []                            # 🔴
+
+excluded_personal_accounts:                   # 🟢 — explicitly out of scope
+  - "Gmail"
+  - "Google Calendar"
+  - "Apple Notes"
+  - "iMessages"
+
+# ============================================================
+# 2. CUSTOMER + VOCABULARY
+# ============================================================
+customer_unit: company                         # 🟡  join key = email domain
+contact_rollup_to_company: true                # 🟡
+
+known_top_customers:
+  # 🟢 from R5 (ME inbox scan) + R15a–d (AIMS countries)
+  - { name: "Saudi Aramco",      region: "KSA", domains: ["aramco.com"], aramco_hq_contacts: ["Cobus", "Bernedict Kheswa"] }
+  - { name: "KNPC",              region: "Kuwait", domains: ["knpc.com.kw"] }   # 🟡 domain guess
+  - { name: "Petro Rabigh",      region: "KSA", domains: ["petrorabigh.com"] }  # 🟡
+  - { name: "Q-Chem",            region: "Qatar", domains: ["qchem.com.qa"], notes: "Invoice format Item 44 April AP" }  # 🟡
+  - { name: "QE-LNG",            region: "Qatar", domains: ["qe-lng.com"] }     # 🟡
+  - { name: "Mellitah / Dolphin", region: "Libya", domains: ["mellitahog.ly"] } # 🟡
+  - { name: "ADNOC / Habshan",   region: "UAE", domains: ["adnoc.ae"] }         # 🟡
+  - { name: "Anwil / Orlen",     region: "Poland", domains: ["anwil.pl", "orlen.pl"] }  # 🟡
+  - { name: "Kanoo",             region: "Bahrain", domains: ["kanoo.com"] }    # 🟡
+  - { name: "Baker Hughes (Libya)", region: "Libya", domains: ["bakerhughes.com"] }  # 🟡
+  - { name: "SATORP",            region: "KSA", domains: ["satorp.com"] }       # 🟡
+  - { name: "Oryx GTL",          region: "Qatar", domains: ["oryxgtl.com.qa"] } # 🟡
+
+confidential_customers:
+  # 🟢 — sale-process buyer + advisors get extra redaction
+  - { type: "sale_process_buyer", redact_in_dashboards: true }
+  - { type: "sale_process_advisor", redact_in_dashboards: true }
+
+# ============================================================
+# 3. NAMING CONVENTIONS
+# ============================================================
+naming_conventions:
+  calendar_tags:                              # 🟢 R19 confirmed
+    - "[Client]"
+    - "[AIMS]"
+    - "[Buyer]"
+  proposal_subject_regex: '(?i)\bproposal\b'           # 🟡 industry standard
+  invoice_subject_regex:  '(?i)\b(inv[-\s]?\d|invoice)\b'  # 🟡
+  rfq_subject_regex:      '(?i)\b(rfq|rfp|tender|inquiry|bid)\b'  # 🟡
+  contract_subject_regex: '(?i)\b(nda|msa|contract|agreement|po\b)\b'  # 🟡
+  ar_followup_regex:      '(?i)\b(overdue|payment|past\s+due|aging|outstanding|reminder)\b'  # 🟡 R12
+  proposal_file_regex:    '(?i)\bproposal.*\.(pdf|docx|pptx)$'  # 🟡
+
+file_locations:
+  # 🟢 all confirmed from Execution Plan
+  sre_gm_root: "/Users/maazwork/Documents/Claude/Projects/SRE General Manager/"
+  daily_logs:  "/Users/maazwork/Documents/Claude/Projects/SRE General Manager/Daily Logs/"
+  weekly_review_pattern: "Weekly Review {date}.md"
+  zaheer_update_pattern: "Zaheer Update {date}.md"
+  pre_meeting_briefs: "/Users/maazwork/Documents/Claude/Projects/SRE General Manager/Daily Logs/Pre-Meeting Briefs/"
+  contracts_inbox: "/Users/maazwork/Documents/Claude/Inbox/Contracts/"
+  action_package_pattern: "Action Package {Month YYYY}"
+  project_tracker_filename: "SRE Project Tracker"      # 🟡 .xlsx in OneDrive or SharePoint
+
+# ============================================================
+# 4. SERVICE TAXONOMY (product lines)
+# ============================================================
+service_lines:
+  # 🟡 — industry standard for sulfur-recovery EPC; Maaz confirms
+  - capital_project          # new SRU build, train expansion
+  - revamp                   # high-volume existing-unit modifications
+  - engineering_study        # performance audit, HAZOP, optimization
+  - field_service            # startup, commissioning, troubleshooting
+  - training                 # operator + engineering
+  - catalyst_spare_supply    # if applicable
+  - sale_process             # 🟢 the company itself is being sold; treat as a dedicated track
+
+# ============================================================
+# 5. SALES-CYCLE STAGES (used by stage 9 inference)
+# ============================================================
+sales_stages:
+  # 🟡 — sulfur-recovery EPC norms; Maaz confirms each definition
+  lead:           "first inbound from new domain OR Squarespace form submission"
+  qualified:      "first calendar event with attendees from the domain"
+  rfq_received:   "inbound with RFQ/RFP/Tender keyword + attachment"
+  proposal_sent:  "outbound mail with Proposal* attachment to customer domain"
+  clarifications: "back-and-forth on proposal subject after proposal_sent"
+  verbal_yes:     "inbound with 'we'd like to proceed' / 'PO is coming' language"
+  po_signed:      "PO number in inbound OR contract PDF appears in OneDrive/SharePoint"
+  in_execution:   "ClickUp project active + weekly project review meeting recurring"
+  won_invoiced:   "first milestone invoice issued (R12 keywords outbound)"
+  lost_explicit:  "inbound with 'regret/not selected/another vendor' language"
+  lost_silent:    "proposal_sent + >180d no inbound + no other activity"
+  dormant:        "no signals for 12mo+"
+
+closing_event: "po_signed"                    # 🟡 confirm with Maaz
+
+stage_probabilities:                          # for forecast math
+  # 🟡 starter values; tune over time
+  lead:           0.05
+  qualified:      0.10
+  rfq_received:   0.20
+  proposal_sent:  0.30
+  clarifications: 0.40
+  verbal_yes:     0.75
+  po_signed:      1.00
+  in_execution:   1.00
+  won_invoiced:   1.00
+
+# ============================================================
+# 6. GEOGRAPHY
+# ============================================================
+geography:
+  # 🟢 from Day Clock + R5 + AIMS country splits
+  regions:
+    NA:  { description: "North America — Calgary daytime",   countries: ["CA", "US"] }
+    ME:  { description: "Middle East — Calgary evening",     countries: ["SA", "KW", "AE", "QA", "OM", "BH"] }
+    OTH: { description: "Other markets — ad-hoc",            countries: ["PL", "LY"] }
+
+  aims_bi_weekly_calls:
+    # 🟢
+    monday_00:    ["KSA", "Kuwait"]
+    tuesday_00:   ["Oman"]
+    wednesday_00: ["UAE"]
+    thursday_00:  ["Qatar"]
+
+# ============================================================
+# 7. TIME + CADENCE
+# ============================================================
+timezone: "America/Edmonton"                  # 🟢
+
+hard_anchors:
+  # 🟢 — audit MUST NOT flag silence inside these windows
+  prayers:
+    fajr:    "05:20"
+    zuhr:    "14:00"
+    asr:     "19:00"
+    maghrib: "21:00"
+    isha:    "22:15"
+  friday_jumua: "14:00-15:30"
+  family_time:  "17:00-22:00"                # excluding prayer slots
+  sleep:        "02:00-05:20"
+
+standing_meetings:
+  # 🟢 from Day Clock
+  - { day: Mon, time: "14:05", title: "Ashley NA 1:1" }
+  - { day: Tue, time: "14:05", title: "Sales 1:1" }
+  - { day: Wed, time: "14:05", title: "Engineering standup" }
+  - { day: Thu, time: "14:05", title: "Bookkeeper" }
+  - { day: Fri, time: "14:05", title: "Top-5" }
+
+personal_touch_targets:
+  # 🟢 Weekly OS §7
+  na_top_clients_per_week: 10
+  me_top_clients_per_week: 5
+  deep_work_blocks_per_week: 15
+  sleep_target_hours: 5.5                    # 🟡 per "≥5:30hrs" in R13
+
+# ============================================================
+# 8. AUDIT WINDOW + SCOPE
+# ============================================================
+audit_window_years: 2                        # 🟡 default
+audit_window_forward_months: 6               # 🟡 calendar look-ahead
+
+excluded_sites: []                           # 🔴
+excluded_customers: []                       # 🔴
+ocr_attachments: false                        # 🟢 default OFF; opt-in only
+
+confidentiality:
+  redact_sale_process_buyer: true             # 🟢
+  redact_named_customers_in_external_export: true  # 🟡
+
+# ============================================================
+# 9. EXTERNAL TOOLS (NOT pulled by THIS audit, noted for cross-walk)
+# ============================================================
+external_systems:
+  clickup:
+    role: "primary project / task tracker"     # 🟢
+    audit_scope: "out_of_scope_for_v1"
+  pocket:
+    role: "meeting AI / call recording"        # 🟢
+    audit_scope: "out_of_scope_for_v1"
+  zoom:
+    role: "call recordings (some)"             # 🟢
+    audit_scope: "out_of_scope_for_v1"
+  squarespace:
+    role: "lead capture forms"                 # 🟢 R18
+    audit_scope: "out_of_scope_for_v1"
+  sulfur_space:
+    role: "community membership feed"          # 🟢 R18
+    audit_scope: "manual_or_scraped_later"
+
+# ============================================================
+# 10. OUTPUT PREFERENCES
+# ============================================================
+dashboards:
+  delivery: "local"                           # 🟡  local | teams | sharepoint
+  audit_dir_root: "audits/sre-{date}/"        # 🟢 placement inside the project
+  refresh: "weekly"                           # 🟡 daily incremental + full weekly
+  recipients:
+    - "Maaz only"                             # 🟡 v1
+
+# ============================================================
+# 11. KNOWN PAIN POINTS (priorities for the dashboards to solve)
+# ============================================================
+pain_points:
+  # 🟢 from Weekly OS + named issues
+  - "Inbox eats deep-work time outside the four windows"
+  - "Pipeline lies on Friday review without Tuesday hygiene (R10)"
+  - "Compliance lapses block tendering (Mushtaryat, Item 43)"
+  - "Anwil NDA sat for weeks — contract first-pass review is slow"
+  - "ME accounts forget accountability when CRM logging is delayed >24h"
+  - "AR aging needs to be pre-staged for Thursday CFO day (R12)"
+  - "Aramco HQ touchpoints fall through quarterly (R22)"
+  - "Sale-process is highest-stakes file — needs weekly written memo (R9)"
+
+# ============================================================
+# END
+# ============================================================

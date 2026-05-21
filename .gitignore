@@ -1,0 +1,72 @@
+# ============================================================
+# Audit output — contains live customer PII, mail/cal/doc metadata.
+# Per runbook/ms365-deep-audit-workflow/AUDIT-EXECUTION-RECIPE.md §safety reminders.
+# ============================================================
+audits/
+
+# ============================================================
+# Local Maaz/Mohammad working artifacts (not for repo)
+# ============================================================
+client-config.yaml
+runbook/ms365-deep-audit-workflow/client-config.yaml
+
+# Operator drafts — customer-specific content produced by skills
+proposals/
+email-drafts/
+
+# Routine runtime data — populated when routines fire (contains live PII)
+routines/output/
+routines/logs/
+
+# ============================================================
+# Credentials / sensitive
+# ============================================================
+*.pit
+.env
+.env.*
+creds.*
+
+# ============================================================
+# Nested git repos (cause submodule confusion)
+# ============================================================
+MOSulfurPlus/
+
+# ============================================================
+# Large binaries — SRE technical library, Office docs, screenshots.
+# Reference material exists locally; not for GitHub. Skill catalogs
+# describe each PDF in ~/.claude/skills/sre-proposal-builder/.
+# ============================================================
+*.pdf
+*.docx
+*.xlsx
+*.pptx
+*.png
+*.jpg
+*.jpeg
+
+# Screenshots in any subdirectory
+**/Screenshot*
+
+# ============================================================
+# Auto-generated / runtime caches
+# ============================================================
+runbook/ms365-deep-audit-workflow/lib/__pycache__/
+runbook/ms365-deep-audit-workflow/lib/*.pyc
+
+# ============================================================
+# Working-folder noise
+# ============================================================
+**/New folder/
+
+# ============================================================
+# Standard noise
+# ============================================================
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+node_modules/
+.cache/
+*.log

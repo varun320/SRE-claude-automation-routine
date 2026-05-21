@@ -72,10 +72,12 @@ routines-claude/
 
 ### Exit criteria
 
-- [ ] `/schedule list` runs cleanly
-- [ ] All Tier 1 connectors authenticated
-- [ ] Repo folder structure committed
-- [ ] Connector smoke tests pass when run interactively
+- [x] `/schedule list` runs cleanly
+- [x] All Tier 1 connectors authenticated
+- [x] Repo folder structure committed
+- [x] Connector smoke tests pass when run interactively
+
+**Closed 2026-05-20.** M365 connection plan (`M365_Claude_Connection_Plan.docx`) executed through §8 — custom Entra app live, delegated Graph scopes admin-consented, MCP server pointed at the custom app, Claude connected, mail/calendar/Teams/OneDrive validated read+write.
 
 ### Rollback
 
@@ -90,6 +92,7 @@ Nothing live yet — abandon and re-plan if connectors require interactive auth 
 ### Steps
 
 1. **Author `routines/tier1/R1-na-inbox-scan.md`.** Copy the build prompt verbatim from the Execution Plan. Add a header block:
+
    ```
    ---
    id: R1
@@ -102,6 +105,7 @@ Nothing live yet — abandon and re-plan if connectors require interactive auth 
    safety: read-only, subjects-only, no drafts
    ---
    ```
+
 2. **Schedule it.** Use `/schedule` to create the cron entry. Point the agent at the prompt file.
 3. **First-fire dry-run.** Either wait for the natural fire or trigger once manually via `/schedule run R1`.
 4. **Log the run.** Save the output to `logs/runs/R1-YYYY-MM-DD.md`. Capture:

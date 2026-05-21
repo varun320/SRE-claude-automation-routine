@@ -86,4 +86,4 @@ Append a line each time you run the full suite.
 
 | Date | Tester | Result | Notes |
 |---|---|---|---|
-| | | | |
+| 2026-05-20 | Maaz | PASS | All 5 read tests + write probe (Outlook draft create/delete). Custom Entra app registration, not Softeria default. M365 Connection Plan §4–§8 complete. |

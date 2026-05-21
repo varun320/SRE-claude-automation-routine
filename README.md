@@ -6,7 +6,7 @@ Operationalize a portfolio of recurring SRE / GM workflows as **scheduled Claude
 
 ## Status
 
-Pre-Phase-0. Repo skeleton, connector inventory, and implementation plan are in place. Phase 0 smoke tests against the ms365 MCP server and the project tracker still need to run before Tier 1 routines are scheduled.
+Phase 0 complete. M365 connection plan executed end-to-end on a custom Microsoft Entra app registration with scoped delegated Graph permissions (Mail, Calendar, Teams, OneDrive/SharePoint — read + write), the Softeria MCP server is pointed at it via `CLIENT_ID`/`TENANT_ID`/`CLIENT_SECRET`, and all five connector smoke tests in [`connectors/connector-check.md`](connectors/connector-check.md) pass. Next: Phase 1 — pilot R1 (NA Inbox Scan) only.
 
 ## Repo Layout
 
