@@ -1,0 +1,96 @@
+---
+status: draft
+scenario: nda_chaser
+to: ["{{COUNTERPARTY_LEGAL_CONTACT}}"]
+cc: ["{{COUNTERPARTY_BUSINESS_CONTACT}}", "{{SRE_INTERNAL_OWNER}}"]
+bcc: []
+subject: "NDA v{{N}}: {{COUNTERPARTY}} - status"
+attachments: []                             # optional: ["legal/nda-{{COUNTERPARTY_SLUG}}-v{{N}}.pdf"]
+drafted_by: "Claude · sre-email-drafter"
+drafted_on: {{YYYY-MM-DD}}
+aims_routed: false
+counterparty: "{{COUNTERPARTY_NAME}}"
+nda_version: "v{{N}}"
+weeks_in_review: {{N_WEEKS}}
+internal_owner: "{{SRE_INTERNAL_OWNER_NAME}}"
+review_status: pending_operator_review
+---
+
+Hi {{COUNTERPARTY_LEGAL_CONTACT_FIRST_NAME}},
+
+Checking in on the **NDA v{{N}}** between {{COUNTERPARTY_NAME}} and Sulfur Recovery Engineering Inc., which we sent on {{NDA_SENT_DATE}} ({{N_WEEKS}} weeks ago).
+
+A few quick options to move this forward:
+
+- **Option A**: Your team is finalising review — could you confirm an expected sign-off date?
+- **Option B**: There are outstanding comments — let's set up a 30-minute call to walk through them.
+- **Option C**: The current draft is acceptable — please return a signed copy.
+
+{{OPTIONAL_BLOCKING_CONTEXT — e.g. "The {{PROJECT_OR_DEAL_REFERENCE}} work is held until the NDA is in place, so any update on timing would help us plan internally."}}
+
+Happy to call this week if it'd help.
+
+Best regards,
+Maaz
+
+--
+Maaz Ahmed Shareef
+Sulfur Recovery Engineering Inc.
+maaz@sulfurrecovery.com
++1 (XXX) XXX-XXXX
+
+---
+
+## Context from audit
+
+The audit flagged Anwil NDA as a pain point: > "Anwil NDA sat for weeks — contract first-pass review is slow."
+
+This template is the chaser for those situations — where SRE has sent an NDA (or contract) and the counterparty's legal team has gone dark.
+
+---
+
+## Operator review checklist before send
+
+- [ ] NDA version + send date verified (search Sent items)
+- [ ] Weeks-in-review calculation correct
+- [ ] Counterparty's legal contact email still active (not auto-bouncing or out-of-office)
+- [ ] CC'd: counterparty's business contact (the person who owns the relationship, not just legal) — they apply pressure on their legal team
+- [ ] SRE internal owner CC'd (typically Maaz himself + whoever's blocked by the NDA, e.g., Dharmesh if engineering work is held)
+- [ ] Options A/B/C are appropriate for this counterparty — some prefer phone calls over multi-option emails
+- [ ] No hostile tone — "this has been 6 weeks" is fine; "this is unacceptable delay" is not
+- [ ] Length 80–120 words
+
+**Approved by**: ______________ **Date**: __________
+
+---
+
+## Escalation rules
+
+| Weeks in review | Tone | Action |
+|---|---|---|
+| 1–2 | Don't chase yet | Wait |
+| 3–4 | Light check-in (Option D only — direct question) | Send |
+| 5–8 | Multi-option chaser (this template) | Send |
+| 9–12 | Escalate to business contact directly | Operator calls business contact; skip skill |
+| 12+ | Consider whether the deal is dead | Operator decides retire-or-call-CEO |
+
+---
+
+## Variant: contract (not NDA) — same shape, different stakes
+
+For full contracts (MSA, project SOW, LTSA) the template structure is identical, but:
+
+- Subject: `Contract review status: {{COUNTERPARTY}} - {{PROJECT_REFERENCE}}`
+- Body: reference specific clauses if there's known back-and-forth on language
+- CC: SRE legal (if external counsel involved) + project owner
+
+---
+
+## Variant: AIMS-relay NDA (Aramco etc.)
+
+When the NDA path is SRE → AIMS → end-customer (typical for Aramco-class customers):
+
+- **To**: AIMS contact (Bader, Shameem, etc.)
+- Subject: `AIMS: NDA v{{N}} status with {{END_CUSTOMER}}`
+- Body: ask AIMS for status on their side (AIMS legal review) + end-customer side
+- The end-customer is NOT in To: or CC: — AIMS handles their side

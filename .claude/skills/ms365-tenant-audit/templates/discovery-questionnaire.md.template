@@ -1,0 +1,54 @@
+# Discovery Questionnaire — MS365 Tenant Audit
+
+> **Purpose:** Capture client-specific assumptions BEFORE running the audit, so synthesis surfaces the right open questions and the dashboard reflects this client's actual sales motion / vocabulary / pain points — not generic boilerplate.
+>
+> **How to use:** Walk the operator through this list in a single ~20-minute call. Save the answered version as `audits/<client-slug>-<date>/discovery-questionnaire.md`. Then derive `client-config.yaml` from `templates/client-config.yaml.template` using these answers.
+
+---
+
+## 1. Client identity
+
+1. **Company name + slug.** Full name + short slug for directory names (e.g. "Acme Corp" → `acme`).
+2. **Operator.** Whose M365 are we reading? Name + email + their role title.
+3. **Tenant primary domain.** What's the email domain? (e.g. `@acme.com`)
+4. **Industry.** One-line description of what the company does. Shapes customer-keyword + subject-regex defaults.
+
+## 2. People
+
+5. **Internal staff active today.** Names + emails + rough roles (3–15 people). Include the operator. Flag anyone with elevated mailbox/calendar access to others.
+6. **External partners that show up in M365.** Engineering partners, account agencies, consultants, financial advisors — anyone who appears in mail/calendar with regularity. Names + email domains.
+7. **Shared mailboxes in use.** `ar@`, `ap@`, `info@`, `sales@`, etc. Which are read regularly vs ignored?
+
+## 3. Customers
+
+8. **Top 10 customers by revenue or attention.** Names + region + primary contact at each.
+9. **Confidential customers / sale-process.** Is the company itself in a sale or being acquired? Is there a buyer or advisor whose name should be redacted from dashboards?
+10. **Sales motion.** Walk me through what "lead → won" looks like. What's the explicit closing event (PO signed? contract executed? first invoice?). What are typical stage names you use internally?
+
+## 4. Routines + cadence
+
+11. **Standing meetings.** What recurring meetings should I expect to find on the operator's calendar? (e.g. "Thursday 10am all-hands", "Tuesday 2pm sales 1:1", "Monthly safety pitstop").
+12. **Calendar tagging convention (if any).** Do you tag events by category (`[Client]`, `[Buyer]`, etc.)? Or is the calendar uncategorized? (Most clients say "uncategorized" — that itself is a finding.)
+13. **Hard anchors.** Times the audit should NEVER flag as silence/idle: prayers, school pickup, family time, etc.
+
+## 5. External systems
+
+14. **What lives outside M365.** CRM (Zoho, Salesforce, HubSpot, Pipedrive)? Project management (ClickUp, Asana, Jira, Monday)? Accounting (QuickBooks, Xero, NetSuite)? Marketing (Squarespace forms, Mailchimp)? Note each + role.
+15. **Where do action items / tasks actually live?** Microsoft ToDo? Planner? External tracker? Outlook flagged emails? This dictates where routine output should land.
+
+## 6. File / SharePoint layout
+
+16. **Where do project files live?** Per-project SharePoint sites? A central `/Clients/<name>/<project>` hierarchy? OneDrive only? Mixed?
+17. **What folders contain sensitive material?** Board, DD, M&A, HR, banking? These need redaction in output.
+
+## 7. Pain points
+
+18. **Inbox.** How many unread does the operator have right now? What classes of mail eat the most time?
+19. **What gets dropped.** Tell me about one task that fell through the cracks in the last 30 days. Where did it land that nobody saw it?
+20. **What would 'good' look like.** If I had one automated routine running tomorrow that saved the operator real time, what would it do?
+
+---
+
+## Notes
+
+Use this section to capture verbatim quotes worth preserving. The dashboard's "operator voice" findings can quote these directly to make the audit feel personal rather than checklist-generated.

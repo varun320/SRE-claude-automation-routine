@@ -1,0 +1,215 @@
+# client-config.yaml — single source of truth for one audit run
+# ----------------------------------------------------------------
+# Copy this file to: audits/<client-slug>-<YYYY-MM-DD>/client-config.yaml
+# Then fill in every field marked NEEDS_INPUT and remove this header block.
+#
+# Tag legend on each field:
+#   # CONFIRMED — value verified in raw evidence
+#   # INFERRED  — best guess; review with operator
+#   # NEEDS_INPUT — operator must supply
+
+# ============================================================
+# 0. CLIENT IDENTITY
+# ============================================================
+client: NEEDS_INPUT                    # human name, e.g. "Acme Corp"
+client_slug: NEEDS_INPUT               # kebab-case, used in directory names: e.g. "acme"
+audit_date: YYYY-MM-DD                 # today
+operator_name: "NEEDS_INPUT"           # person being audited (the one whose MS365 is being read)
+operator_role: "NEEDS_INPUT"           # CEO / GM / Founder / VP Ops / etc.
+
+# ============================================================
+# 1. TENANT + IDENTITY
+# ============================================================
+tenant:
+  primary_domain: "NEEDS_INPUT"        # e.g. acme.com
+  onmicrosoft_suffix: "NEEDS_INPUT"    # e.g. acme.onmicrosoft.com
+  sharepoint_host: "NEEDS_INPUT"       # e.g. acme.sharepoint.com
+  tenant_id: "NEEDS_INPUT"             # GUID from get-current-user metadata
+  internal_personal_aliases: []        # any staff using personal addresses for work
+
+operator:
+  upn: "NEEDS_INPUT"                   # e.g. ceo@acme.com
+  entra_id: "NEEDS_INPUT"              # GUID from get-current-user
+  directory_roles: []                  # populated after Stage 1, e.g. ["Global Administrator"]
+  time_zone: "NEEDS_INPUT"             # e.g. "America/Edmonton", "Europe/London"
+  working_hours: { start: "08:00", end: "17:00", days: ["mon","tue","wed","thu","fri"] }
+  full_mailbox_access_to: []           # other mailboxes this operator can read (e.g. ["info@", "ceo-asst@"])
+
+in_scope_mailboxes_full: []            # full mailbox + calendar reads — usually just operator + maybe co-founder
+in_scope_users_metadata: []            # directory-only, no body access. Populated from Stage 1.
+shared_mailboxes: []                   # e.g. ["ar@acme.com", "info@acme.com", "sales@acme.com"]
+excluded_users: []
+excluded_personal_accounts: []         # Gmail / Apple Notes / etc. — explicitly out of scope
+
+# ============================================================
+# 2. EXTERNAL PARTNERS (if applicable)
+# ============================================================
+# Partners that appear as both tenant guests AND in mail/calendar.
+# Example: an engineering company with a Middle East partner agency.
+external_partners: []
+# Format:
+# external_partners:
+#   - name: "Acme Partner Org"
+#     domains: ["partner.com"]
+#     contacts:
+#       - { name: "John Doe", email: "john@partner.com", role: "ME lead" }
+
+# ============================================================
+# 3. CUSTOMER VOCABULARY
+# ============================================================
+customer_unit: company                 # company | contact | both
+contact_rollup_to_company: true
+
+known_top_customers: []
+# Format:
+# known_top_customers:
+#   - name: "Big Customer Inc"
+#     region: "USA"
+#     domains: ["bigcustomer.com"]
+#     primary_contacts: ["Jane Smith"]
+#     stage_hint: in_execution           # see sales_stages below
+
+confidential_customers: []
+# Format:
+# confidential_customers:
+#   - { type: "sale_process_buyer", redact_in_dashboards: true }
+
+# ============================================================
+# 4. CUSTOMER-NAME KEYWORDS (Stage 2B subject matching)
+# ============================================================
+# Used by the calendar audit to detect customer-named meetings.
+# Keep aliases per customer — naming drifts over years.
+customer_keywords: []
+# Format:
+# customer_keywords:
+#   - { canonical: "Big Customer Inc", aliases: ["Big Customer", "BCI", "BC Inc"] }
+
+# ============================================================
+# 5. SALES-STAGE STATE MACHINE
+# ============================================================
+# Adapt per client's sales motion. The state names appear as
+# stage badges in the dashboard customer table.
+sales_stages:
+  lead:           "first inbound from new domain OR website form submission"
+  qualified:      "first calendar event with attendees from the domain"
+  rfq_received:   "inbound with RFQ/RFP/Tender keyword + attachment"
+  proposal_sent:  "outbound mail with Proposal* attachment to customer domain"
+  clarifications: "back-and-forth on proposal subject after proposal_sent"
+  verbal_yes:     "inbound with 'we'd like to proceed' / 'PO is coming' language"
+  po_signed:      "PO number in inbound OR contract PDF appears in OneDrive/SharePoint"
+  in_execution:   "project active + weekly project review meeting recurring"
+  won_invoiced:   "first milestone invoice issued"
+  lost_explicit:  "inbound with 'regret/not selected/another vendor' language"
+  lost_silent:    "proposal_sent + >180d no inbound + no other activity"
+  dormant:        "no signals for 12mo+"
+
+closing_event: "po_signed"             # confirm with operator
+stage_probabilities:
+  lead:           0.05
+  qualified:      0.10
+  rfq_received:   0.20
+  proposal_sent:  0.30
+  clarifications: 0.40
+  verbal_yes:     0.75
+  po_signed:      1.00
+  in_execution:   1.00
+  won_invoiced:   1.00
+
+# ============================================================
+# 6. SUBJECT-LINE REGEXES (Stage 2A signal extraction)
+# ============================================================
+# Default oil-and-gas EPC patterns; adapt per client industry.
+naming_conventions:
+  calendar_tags_goal_state:           # aspirational — observed-state usually has 0 tags
+    - "[Client]"
+    - "[Partner]"
+    - "[Buyer]"
+  proposal_subject_regex: '(?i)\bproposal\b'
+  invoice_subject_regex:  '(?i)\b(inv[-\s]?\d|invoice)\b'
+  rfq_subject_regex:      '(?i)\b(rfq|rfp|tender|inquiry|bid)\b'
+  contract_subject_regex: '(?i)\b(nda|msa|contract|agreement|po\b)\b'
+  ar_followup_regex:      '(?i)\b(overdue|payment|past\s+due|aging|outstanding|reminder)\b'
+  closing_signal_regex:   '(?i)\b(po\s*signing|po\s*approved|awarded|order\s+placed)\b'
+
+# ============================================================
+# 7. GEOGRAPHY
+# ============================================================
+geography:
+  regions: {}
+# Format:
+# geography:
+#   regions:
+#     NA:  { description: "North America",   countries: ["US", "CA"] }
+#     EU:  { description: "Europe",          countries: ["UK", "DE", "FR"] }
+#     ME:  { description: "Middle East",     countries: ["SA", "AE", "QA"] }
+
+# ============================================================
+# 8. TIME + CADENCE
+# ============================================================
+timezone: "NEEDS_INPUT"                # e.g. "America/Edmonton"
+
+hard_anchors:
+  # Time windows the audit MUST NOT flag as silence
+  # e.g.:
+  # prayers: { fajr: "05:20", zuhr: "14:00", asr: "19:00", maghrib: "21:00", isha: "22:15" }
+  # family_time: "17:00-22:00"
+  # sleep: "02:00-05:20"
+
+standing_meetings_observed: []
+# Populate after Stage 2B from recurring_meetings analysis.
+# Format:
+# standing_meetings_observed:
+#   - { day: Thu, time: "10:00", title: "Bi-Weekly Job Meeting", organizer: "ops-asst@" }
+
+standing_meetings_goal_state: []
+# Optional — if operator wants to target a different cadence than observed.
+
+# ============================================================
+# 9. AUDIT WINDOW + SCOPE
+# ============================================================
+audit_window_years: 2                  # default 2-year retrospective
+audit_window_forward_months: 6         # calendar look-ahead
+
+excluded_sites: []                     # SharePoint sites to skip (e.g. archived ones)
+excluded_customers: []                 # customer names to skip in dashboards
+ocr_attachments: false                 # default OFF; opt-in per stage if needed
+
+confidentiality:
+  redact_sale_process_buyer: false     # set true if a confidential_customer is in scope
+  redact_named_customers_in_external_export: false
+  redact_folders: []                   # e.g. ["SRE DD", "Board", "M&A"]
+
+# ============================================================
+# 10. EXTERNAL TOOLS (visible from M365, not pulled by THIS audit)
+# ============================================================
+external_systems: {}
+# Format:
+# external_systems:
+#   zoho:
+#     role: "primary CRM"
+#     audit_scope: "out_of_scope_for_v1"   # or "in_scope" if upgraded
+#   clickup:
+#     role: "task tracker"
+#     audit_scope: "out_of_scope_for_v1"
+
+# ============================================================
+# 11. OUTPUT PREFERENCES
+# ============================================================
+dashboards:
+  delivery: "local"                    # local | teams | sharepoint
+  audit_dir_root: "audits/<client_slug>-{date}/"
+  refresh: "weekly"                    # weekly | daily-incremental
+  recipients: []                       # who sees the dashboard
+
+dashboard_branding:
+  accent_color: "#F0B53C"              # default sulfur amber; replace with client brand
+  product_name: "Tenant Audit"
+
+# ============================================================
+# 12. KNOWN PAIN POINTS (for dashboard findings prioritization)
+# ============================================================
+pain_points: []                        # populate from operator interview
+
+# ============================================================
+# END
+# ============================================================

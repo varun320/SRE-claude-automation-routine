@@ -1,0 +1,82 @@
+---
+status: draft
+scenario: year_end_audit
+to: ["{{AUDITOR_OR_AIMS_FINANCE_EMAIL}}"]
+cc: ["ashleyh@sulfurrecovery.com"]
+bcc: []
+subject: "Re: AUDIT CONFIRMATION REQUEST: BALANCE AS OF 31.12.{{YYYY}} (SRE)"
+attachments: ["finance/SRE-balance-as-of-31-12-{{YYYY}}.pdf"]
+drafted_by: "Claude · sre-email-drafter"
+drafted_on: {{YYYY-MM-DD}}
+aims_routed: false
+balance_as_of_date: "31.12.{{YYYY}}"
+counterparty: "{{COUNTERPARTY_NAME}}"      # e.g. "QChem", "KNPC", "Tüpraş"
+confirmed_balance: "{{CURRENCY}} {{AMOUNT}}"
+discrepancy_flag: false                    # set true if our records disagree with auditor's request
+review_status: pending_operator_review
+---
+
+Hi {{AUDITOR_FIRST_NAME}},
+
+In response to your audit confirmation request dated {{REQUEST_DATE}} regarding the balance between Sulfur Recovery Engineering Inc. and **{{COUNTERPARTY_NAME}}** as of **31 December {{YYYY}}**:
+
+{{IF_NO_DISCREPANCY:
+"We confirm the balance as **{{CURRENCY}} {{AMOUNT}}** ({{IN_WORDS}}).
+
+This figure is consistent with our internal records and reflects all outstanding invoices and payments as of the cut-off date. Supporting documentation is attached for your reference."
+}}
+
+{{IF_DISCREPANCY:
+"Our records show a balance of **{{CURRENCY}} {{OUR_AMOUNT}}** as of 31 December {{YYYY}}, which differs from the figure of {{CURRENCY}} {{THEIR_AMOUNT}} in your request.
+
+The variance appears to relate to {{LIKELY_RECONCILIATION_CAUSE — e.g. "Invoice #INV-2025-0314 dated 28 December 2025 (USD 12,500) which may not yet have been received on your side"}}.
+
+I've attached our statement showing the underlying invoices + payments. Happy to schedule a brief call to reconcile if helpful."
+}}
+
+Thanks,
+Maaz
+
+--
+Maaz Ahmed Shareef
+Sulfur Recovery Engineering Inc.
+maaz@sulfurrecovery.com
++1 (XXX) XXX-XXXX
+
+---
+
+## Context: year-end audit confirmation flow
+
+External auditors (or AIMS finance acting on behalf of a customer's auditor) send a confirmation request asking SRE to confirm the balance owed between SRE and the customer as of 31.12.YYYY. This is standard year-end audit procedure.
+
+Real subject pattern from audit:
+- `Re: AUDIT CONFIRMATION REQUEST: BALANCE AS OF 31.12.2025 (SRE)`
+
+Reply must include:
+1. Confirmation or dispute of the stated balance
+2. Supporting documentation (signed statement attachment)
+3. Polite offer to reconcile if numbers disagree
+
+---
+
+## Operator review checklist before send
+
+- [ ] Balance figure verified against Project Tracker AR column AND latest QuickBooks/Zoho Books report
+- [ ] Counterparty name spelled exactly as in the request
+- [ ] Date format consistent (31 December {{YYYY}} OR 31.12.YYYY — match the request's format)
+- [ ] Attachment (signed statement PDF) is the right document and is signed by Ashley/Maaz
+- [ ] Ashley CC'd (she owns the AR tracking)
+- [ ] If discrepancy, the reconciliation cause is verified and accurate
+- [ ] No mention of unrelated invoices or future receivables (audit confirmation is point-in-time only)
+- [ ] Length 80–120 words
+
+**Approved by**: ______________ **Date**: __________
+
+---
+
+## Edge cases
+
+- **Counterparty in dispute**: if SRE and the customer are mid-dispute over invoice validity, the audit confirmation reply should state the SRE position clearly and reference the dispute. Loop in Maaz personally and possibly counsel before sending.
+- **Multi-currency**: if the underlying invoices are in USD but the customer's books are in QAR/SAR/AED, state both: "The balance in our books is USD X; based on the agreed conversion rate of Y, this equates to QAR Z."
+- **Multiple auditors for the same customer**: occasionally two audit firms request the same confirmation from different angles (internal vs external auditor). Each gets a separate reply with the same balance figure.
+- **Late response**: if SRE missed the auditor's deadline, lead with: "Apologies for the delayed response — the balance as of 31.12.{{YYYY}} is..."

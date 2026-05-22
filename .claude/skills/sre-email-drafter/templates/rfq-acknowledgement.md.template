@@ -1,0 +1,93 @@
+---
+status: draft
+scenario: rfq_acknowledgement
+to: ["{{CUSTOMER_CONTACT_EMAIL}}"]
+cc: ["{{SRE_INTERNAL_OWNER}}", "{{AIMS_CONTACT_IF_BRIDGED}}"]
+bcc: []
+subject: "{{CUSTOMER_NAME}} RFQ - acknowledged - {{TOPIC}}"
+attachments: []
+drafted_by: "Claude · sre-email-drafter"
+drafted_on: {{YYYY-MM-DD}}
+aims_routed: false                         # ack typically direct; AIMS CC'd
+end_customer: "{{CUSTOMER_NAME}}"
+rfq_reference: "{{RFQ_NUMBER_OR_INTERNAL_REF}}"
+proposal_eta: "{{YYYY-MM-DD}}"             # when SRE will send the full proposal
+review_status: pending_operator_review
+---
+
+Hi {{CUSTOMER_CONTACT_FIRST_NAME}},
+
+Thank you for the RFQ on **{{TOPIC}}** received {{RFQ_RECEIVED_DATE}} (your ref: **{{RFQ_NUMBER}}**).
+
+We've reviewed the high-level scope and confirm SRE can support this work. Our team is preparing the full proposal, which I expect to send by **{{PROPOSAL_ETA}}**.
+
+{{OPTIONAL_CLARIFICATION_QUESTIONS — if any clarifications are needed before drafting:
+"Two quick clarifications would help shape the proposal:
+1. {{QUESTION_1}}
+2. {{QUESTION_2}}
+
+If you can share these at your convenience, it'll let us tighten the scope and timeline."
+}}
+
+{{OPTIONAL_PERSONNEL_NOTE — e.g. "Dharmesh Patel (Principal Engineer) will lead the technical scoping. I'll remain the commercial contact."}}
+
+Best regards,
+Maaz
+
+--
+Maaz Ahmed Shareef
+Sulfur Recovery Engineering Inc.
+maaz@sulfurrecovery.com
++1 (XXX) XXX-XXXX
+
+---
+
+## Why this template exists
+
+Sending an acknowledgement within 24h of an RFQ landing has two benefits:
+
+1. **Signals professionalism** — many EPC firms go silent for a week before sending the proposal. A same-day ack differentiates SRE.
+2. **Surfaces blocking questions early** — if the RFQ is missing critical info (process parameters, timeline expectations, scope ambiguity), better to ask now than discover in week 2 of drafting.
+
+Don't overthink the ack — it's a 60-100 word email. The real work is in the proposal that follows.
+
+---
+
+## Operator review checklist before send
+
+- [ ] RFQ number / customer reference verified
+- [ ] Proposal ETA realistic (usually 5-15 business days; for tender format, can be 20+)
+- [ ] Clarification questions (if any) are genuinely blocking — don't ask just to ask
+- [ ] AIMS bridge contact CC'd if ME customer
+- [ ] SRE internal owner CC'd (Ron for BD-led, Dharmesh for engineering-led, Chuck for US)
+- [ ] Length 60–100 words
+- [ ] No commitment to scope/price/timeline beyond what's confirmable
+
+**Approved by**: ______________ **Date**: __________
+
+---
+
+## Variants
+
+### Variant A: tender format RFQ (Qatar Mushtaryat, Kuwait K-Tendering, Saudi Eitimad)
+
+- Drop the personal greeting; use "Dear Sir/Madam,"
+- Include tender reference number prominently
+- Promise proposal by the tender deadline minus 2 business days (give yourself buffer)
+- CC any local AIMS contact who handles tender registration
+
+### Variant B: webinar follow-up RFQ
+
+When the RFQ comes from someone who attended an SRE webinar:
+
+- Open with: "Thanks for your follow-up after the SRE {{WEBINAR_TOPIC}} session on {{DATE}}."
+- Reference the specific webinar topic that prompted the inquiry
+- This is a warmer lead — acknowledge that
+
+### Variant C: re-engagement RFQ (silent customer re-surfacing)
+
+When a previously-silent customer (per R5 monitor) sends an RFQ:
+
+- Open with reference to prior project: "Great to hear from you again — it's been since {{LAST_TOUCH_DATE}}, when we did {{PRIOR_PROJECT}}."
+- Treat as warm; don't pretend it's a cold ack
+- Loop in Ron or whoever owned the prior relationship

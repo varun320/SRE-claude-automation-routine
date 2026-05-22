@@ -1,0 +1,123 @@
+---
+status: draft
+scenario: internal_coordination
+to: ["{{INTERNAL_RECIPIENT_EMAIL}}"]
+cc: ["{{ADDITIONAL_INTERNAL_RECIPIENTS}}"]
+bcc: []
+subject: "{{ONE_LINE_TOPIC}}"
+attachments: []
+drafted_by: "Claude · sre-email-drafter"
+drafted_on: {{YYYY-MM-DD}}
+recipient_role: "{{ashley|dharmesh|ron|talha|chuck|kunal|kurtis|girish}}"
+context: "{{CUSTOMER_OR_PROJECT_REF}}"
+asks: ["{{ASK_1}}", "{{ASK_2}}"]
+review_status: pending_operator_review
+---
+
+Hi {{FIRST_NAME}},
+
+{{OPENING_LINE_WITH_CONTEXT — e.g.:
+"Following up on the Aramco RTR May-31 review prep —"
+"Quick update on the Q-Chem proposal status —"
+"Re: the bi-weekly job meeting Thursday —"
+"Heads-up on KNPC budgetary proposal —"
+}}
+
+{{BODY_PARAGRAPH_OR_BULLETS:
+
+For an ASK email (1-3 bullets, each a specific action):
+"Could you handle the following before Thursday?
+- {{ASK_1}}
+- {{ASK_2}}"
+
+For an UPDATE email (no asks, just info):
+"Status as of today:
+- {{UPDATE_1}}
+- {{UPDATE_2}}
+- {{UPDATE_3}}"
+
+For a DECISION-PROMPT email (asking for the recipient's call):
+"Two options on the {{TOPIC}}:
+- Option A: {{OPTION_A_AND_TRADEOFF}}
+- Option B: {{OPTION_B_AND_TRADEOFF}}
+My lean is {{LEAN}}, but happy to go with your call."
+}}
+
+{{OPTIONAL_CLOSING — e.g. "Let me know if anything needs more context." / "Ping me if you want to talk it through."}}
+
+Thanks,
+Maaz
+
+---
+
+## Why internal emails are different
+
+The audit shows Maaz's internal SRE correspondence is shorter and less formal than external. Signature drops to just "Maaz" (sometimes no name at all on Teams). The tone is direct, action-oriented, with the recipient's role implicit.
+
+Role-specific patterns (per execution plan):
+
+| Recipient | What they own | Maaz typically asks them to... |
+|---|---|---|
+| **Ashley Hartt** | admin / HR / bank / AR / Bookings | Schedule meetings · process AR · handle vendor registration paperwork · book travel |
+| **Dharmesh Patel** | Principal Engineer · engineering scope owner | Review technical scope · estimate engineering days · join customer technical calls · sign off on Symmetry models |
+| **Ron Armstrong** | BD / NA customer relationships | Lead NA customer calls · follow up on NA pipeline · introduce Maaz to NA contacts |
+| **Talha** | ME technical / conferences | Lead ME technical scoping · prep for AIMS-bridged calls · attend ME conferences |
+| **Chuck Stephenson** | US Regional Manager | Cover US-specific accounts · handle US travel logistics · sign US-related contracts |
+| **Kunal / Kurtis** | engineers · execution-tier | Run sampling campaigns · draft technical sections of proposals · support Dharmesh |
+| **Girish Madupalli** | engineer (2025 hire) | Backup support · learning curve on Symmetry · ME-team backfill |
+| **Don Green** | (role unclear from audit — calendar shared to Maaz, marketing-adjacent based on inbox) | Forward marketing inquiries · industry-news routing |
+| **Dwayne Vinck** | Board Chairman | Heads-up on board-level matters · NOT for operational coordination |
+
+---
+
+## Operator review checklist before send
+
+- [ ] Recipient is the right person for the ask (cross-check against role table above)
+- [ ] Subject line is direct and informative (no "Quick question" filler)
+- [ ] If multiple asks, each has its own bullet and ideally a due date
+- [ ] No external customer / sale-process content (internal coordination only)
+- [ ] CC'd people genuinely need to be in the loop (not Cc-everyone reflex)
+- [ ] Length 60–150 words
+- [ ] Tone matches relationship (formal for Dwayne, casual for Ashley)
+
+**Approved by**: ______________ **Date**: __________
+
+---
+
+## Anti-patterns
+
+- ❌ **"Please assist with..."** — Maaz says "Could you handle...?" or "Can you..."
+- ❌ **"Kindly do the needful"** — never; not Maaz's voice
+- ❌ **All-team CC** — Maaz CCs deliberately. Not "everyone who's vaguely involved"
+- ❌ **Internal email with formal signature block** — drop to just "Maaz" or "Maaz" + nothing else
+- ❌ **Subject line "Update"** — be specific: "Q-Chem proposal status update"
+- ❌ **Replying-all to broadcast threads with a 1-person comment** — start a new thread or reply direct
+
+---
+
+## Variant: heads-up vs ask
+
+The body shape changes a lot based on whether you want action or just awareness:
+
+**Heads-up (no action expected)**:
+> "FYI — Aramco RTR May-31 review is now confirmed for 1am MT. Calendar invite incoming. No prep needed from your side; I'll handle the deck."
+
+**Ask (specific action required)**:
+> "Could you pull together a 1-pager on RTR project status by Thursday EOD? Need it for the May-31 review. Just bullet list of progress + next milestones; I'll style it."
+
+Both are valid. Pick the right one — sending an "ask" framed as "heads-up" leads to missed work.
+
+---
+
+## Variant: bad-news internal email
+
+When something has gone wrong (project slipped, customer is unhappy, sample run failed):
+
+- Lead with the bad news (don't bury it)
+- One sentence on what happened
+- One sentence on what's being done now
+- One ask (if any) — or "Will keep you posted; no action needed"
+- Sign off: just "Maaz" (no warmth padding)
+
+Example:
+> "Heads-up — Q-Chem proposal slipped from Friday to Tuesday. Sanjay asked for two clarifications that need engineering input. Dharmesh is on it tomorrow morning. Will send the revised draft Tuesday by noon MT. — Maaz"

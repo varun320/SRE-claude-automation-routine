@@ -1,0 +1,203 @@
+---
+status: draft
+customer: "{{CLIENT_NAME}}"
+customer_region: "{{REGION}}"
+customer_contact: "{{TECHNICAL_CONTACT}}"
+topic: "{{PROPOSAL_TOPIC}}"
+drafted_by: "Claude · sre-proposal-builder"
+drafted_on: {{YYYY-MM-DD}}
+source_documents:
+  - "{{SOURCE_DOC_1}}"
+  - "{{SOURCE_DOC_2}}"
+library_citations:
+  - "{{LIB_CITATION_1}}"
+  - "{{LIB_CITATION_2}}"
+review_status: pending_operator_review
+aims_routed_through: "{{AIMS_CONTACT_OR_NONE}}"
+proposal_number: "{{YEAR}}{{SEQUENCE}}"   # e.g. 2026121 — matches SRE project numbering
+estimated_value: "{{CURRENCY}} {{AMOUNT}}"
+execution_shape: "{{ONSITE_REMOTE_HYBRID}}"
+---
+
+# Proposal · {{CLIENT_NAME}} · {{PROPOSAL_TOPIC}}
+
+**Date**: {{YYYY-MM-DD}}
+**To**: {{TECHNICAL_CONTACT}}, {{CLIENT_NAME}}
+**From**: Maaz Ahmed Shareef, Sulfur Recovery Engineering Inc.
+**Reference**: SRE-{{PROPOSAL_NUMBER}}
+
+---
+
+## 1. Summary Letter
+
+{{PARAGRAPH_1: Describe the client's problem, how they approached us, and what solutions were decided.}}
+
+{{PARAGRAPH_2: Introduce the attached proposal briefly, mentioning key highlights — typically the 2-3 most compelling deliverables and any unique SRE qualifier.}}
+
+---
+
+## 2. Background
+
+{{SINGLE_PARAGRAPH: Outline the client's background, focusing on their processes and identifying problems clearly. Mention all relevant equipment and streams to fully explain the issue and operations. Cite SRE services brochure here.
+
+[Cite: SRE services.pdf]}}
+
+---
+
+## 3. Process Overview
+
+{{PARAGRAPH_1: Deeper chemical-process explanation. Cite Claus chemistry references as appropriate.
+
+[Cite: LRGCC 2003 New Insights into the Claus Thermal Stage]}}
+
+{{PARAGRAPH_2: Client-provided process parameters. Include actual values from the RFQ / DCS data (flows, temperatures, pressures, compositions). Be specific.}}
+
+---
+
+## 4. Project Scope
+
+{{ONE_PARAGRAPH: State all deliverables and project outcomes based on the provided data. Tie back to the client's stated motivation from §1.}}
+
+### Deliverables
+
+| Deliverable | Description | Estimated Time |
+|---|---|---|
+| {{DELIVERABLE_1}} | {{DESCRIPTION_1}} | {{TIME_1}} days |
+| {{DELIVERABLE_2}} | {{DESCRIPTION_2}} | {{TIME_2}} days |
+| {{DELIVERABLE_3}} | {{DESCRIPTION_3}} | {{TIME_3}} days |
+| {{DELIVERABLE_4_IF_APPLICABLE}} | {{DESCRIPTION_4}} | {{TIME_4}} days |
+
+**Total estimated project duration**: {{TOTAL_DAYS}} days
+
+---
+
+## 5. Onsite Visit and Sampling
+
+> *Include this section only if execution_shape is onsite or hybrid.*
+
+### Proposed Daily Schedule
+
+| Day | Activity | SRE personnel |
+|---|---|---|
+| Day 1 (Mobilization) | Travel + safety briefing + equipment setup | {{PERSONNEL_LIST}} |
+| Day 2 | Pre-test meeting · Data Request Sheet walk-through · sample point survey | {{PERSONNEL_LIST}} |
+| Day 3 | First test run · streams {{STREAM_LIST}} | {{PERSONNEL_LIST}} |
+| Day 4 | Repeat test run · spot checks · DCS data collection | {{PERSONNEL_LIST}} |
+| Day 5 | Final sampling + close-out meeting | {{PERSONNEL_LIST}} |
+| Day 6 (Demobilization) | Equipment pack-up · travel | {{PERSONNEL_LIST}} |
+
+### Streams to be tested
+
+| Stream | Sample point | Frequency | Analysis |
+|---|---|---|---|
+| {{STREAM_1}} | {{SP_1}} | {{FREQ_1}} | {{ANALYSIS_1}} |
+| {{STREAM_2}} | {{SP_2}} | {{FREQ_2}} | {{ANALYSIS_2}} |
+
+### Onsite safety requirements
+
+- H₂S Alive certification (all SRE personnel current)
+- 2× 30-minute SCBA units (client-provided or SRE-supplied)
+- Hot work permit if RF temperature measurement involves IR pyrometer port access
+- Site-specific safety briefing by client HSE before any sample point access
+
+---
+
+## 6. Term and Additional Information
+
+### Plant Data
+
+A log of all necessary process data (flows, temperatures, pressures) will be recorded throughout the test period.
+
+- Mechanical drawings for equipment (reaction furnace, condensers, converters, etc.) may be required to create the simulation model.
+- DCS screenshots of the amine regenerator overhead conditions will be needed for calculating water content in acid gases.
+- DCS data of the amine system will be needed to assess unit performance since the last health check.
+- A Data Request Sheet will summarize required parameters during the pre-test meeting.
+
+### Gas Plant Responsibilities
+
+The following client-side responsibilities apply to this engagement:
+
+- Full cooperation by operations staff for collecting plant data and ensuring safe sampling of acid gas streams.
+- Access to clean power supply (110V or 220V) and 4 meters of lab/bench space with fume hood for waste disposal.
+- Provide a bottle of UHP (99.999% pure) Helium for chromatograph operations.
+- Ensure laboratory glassware and other required equipment are available.
+- Two 30-minute SCBA units (or alternatives if provided by the client) for sampling process streams.
+- Sample points must be accessible and free from interference (e.g., railings).
+- {{ADDITIONAL_CLIENT_SPECIFIC_RESPONSIBILITY_IF_ANY}}
+
+Other test requirements will be determined based on the scope of work.
+
+---
+
+## 7. Technical Information
+
+### Gas Chromatograph Calibration
+
+All SRE chromatographs are calibrated regularly with certified, up-to-date calibration standards, ensuring the highest accuracy available. These gases are referred to as 'protocol' or 'primary' standards.
+
+### Gas Components Analyzed
+
+The following components are analyzed in each process stream:
+
+| Component | Analyzed in Process Stream |
+|---|---|
+| H₂, SO₂, Toluene | C₂H₄, nC₄, Methyl Mercaptan |
+| Ar, CS₂, Benzene | iC₄, COS, Ethyl Mercaptan |
+| (Additional analysis available on request) | |
+
+### Process Simulation Software
+
+Symmetry™ provides accurate, robust, and cost-effective process simulation solutions to predict the behavior of process units and plants. It is a reliable partner in modeling processes in the oil and gas, refining, and chemical industries. Key processes like natural gas sweetening, Claus plants, and tail gas treatment are simulated efficiently without the need for special workarounds.
+
+---
+
+## 8. Payment Terms
+
+An invoice will be submitted upon completion of onsite work, payable within {{PAYMENT_DAYS}} days. For clients with payment terms over 45 days, a 4% interest charge will be applied. Any work exceeding 10 hours per shift incurs an overtime rate of USD $650 per hour. Cancellations before mobilization incur no costs; cancellations post-mobilization cost USD $6,500 plus any non-recoverable expenses.
+
+| Payment Term | Condition | Amount |
+|---|---|---|
+| Onsite Overtime | Work exceeding 10 hours per shift | USD $650/hour |
+| Extension | Per client request | USD $6,500/day |
+| Delay Standby | Per delay caused onsite | USD $2,000/day |
+
+**Estimated proposal value**: {{CURRENCY}} {{TOTAL_AMOUNT}} (excluding travel + per diem at cost)
+
+---
+
+## 9. Professional Liability
+
+All SRE employees are covered internationally by the Workers' Compensation Board of Alberta, Canada, and have up-to-date H2S Alive, First Aid, WHMIS, and TDG certification. SRE holds $5,000,000.00 in general liability coverage and $1,000,000.00 in professional liability. SRE implements a drug and alcohol policy and safety program that adheres to industry standards.
+
+---
+
+## References
+
+1. {{LIB_CITATION_1}}
+2. {{LIB_CITATION_2}}
+3. {{LIB_CITATION_3}}
+4. SRE Services Brochure (attached)
+5. SRE 150 Recent Projects (2022) — relevant case studies available on request
+
+---
+
+## Operator review checklist
+
+Before this draft becomes a sent proposal:
+
+- [ ] §1 Summary — problem statement matches what client actually told us (verbatim from source)
+- [ ] §4 Deliverables + timeline are realistic given personnel availability
+- [ ] §5 Daily schedule feasible given travel + local logistics (if onsite)
+- [ ] §8 Payment terms aligned with client's prior payment history or contract preferences
+- [ ] References — every citation points to a document that exists in `SulfurProposals/database/`
+- [ ] Total proposal value sanity-checked against historical similar projects
+- [ ] AIMS routing flag accurate (cover email goes to AIMS contact, not client direct, if AIMS-bridged)
+- [ ] Confidential customer / sale-process flag honored
+- [ ] No `[CITATION NEEDED]` tags remaining
+- [ ] No `{{PLACEHOLDER}}` tokens remaining
+
+**Approved by**: ______________ **Date**: __________ **Edits noted in**: ______________
+
+---
+
+*Once this checklist is complete and signed, hand off to `sre-email-drafter` skill to produce the cover email.*

@@ -1,0 +1,111 @@
+---
+status: draft
+scenario: customer_health_check
+to: ["{{CUSTOMER_CONTACT_EMAIL}}"]
+cc: ["{{SRE_INTERNAL_OWNER}}"]
+bcc: []
+subject: "{{CUSTOMER_NAME}} - checking in"  # or: "{{CUSTOMER_NAME}} - {{LAST_TOPIC}} status?"
+attachments: []
+drafted_by: "Claude · sre-email-drafter"
+drafted_on: {{YYYY-MM-DD}}
+aims_routed: false                         # depends per customer
+end_customer: "{{CUSTOMER_NAME}}"
+last_touch_date: "{{YYYY-MM-DD}}"
+days_silent: {{N_DAYS}}
+last_topic: "{{LAST_TOPIC}}"
+re_engagement_hook: "{{SOFT_EXCUSE_TO_REACH_OUT}}"
+review_status: pending_operator_review
+---
+
+Hi {{CUSTOMER_CONTACT_FIRST_NAME}},
+
+It's been a while since we spoke — last I recall, we left {{LAST_TOPIC}} {{LAST_STATUS — e.g. "at the proposal-review stage" / "with the technical sampling complete and report in flight" / "open pending your team's review"}}.
+
+{{RE_ENGAGEMENT_HOOK_LINE — pick one approach:
+
+OPTION A (industry signal): "I noticed {{INDUSTRY_NEWS_OR_REGULATORY_CHANGE}} — wanted to check whether this affects your {{UNIT_OR_TOPIC}} priorities."
+
+OPTION B (conference / event): "We're heading to {{CONFERENCE_NAME}} in {{MONTH}} — let me know if you'll be there; would be good to meet in person."
+
+OPTION C (relevant new SRE capability): "We've recently completed {{NEW_PROJECT_OR_CAPABILITY}} which might be relevant for your {{TOPIC}} work."
+
+OPTION D (direct check-in, no hook): "Just wanted to check where things stand on {{LAST_TOPIC}}, and whether there's anything pending from our side."
+}}
+
+Happy to schedule a quick call if useful.
+
+Best regards,
+Maaz
+
+--
+Maaz Ahmed Shareef
+Sulfur Recovery Engineering Inc.
+maaz@sulfurrecovery.com
++1 (XXX) XXX-XXXX
+
+---
+
+## When to send a health check
+
+Paired with R5 (Customer Touch Monitor) or R22 (Quarterly HQ Touchpoint) routine output. The routine flags customers with no touch in N+ days; this template is the response.
+
+| Silence | Hook style | Tone |
+|---|---|---|
+| 30–60 days | Direct check-in (Option D) | Warm, low-key |
+| 60–120 days | Industry-signal hook (Option A) | Re-establish relevance |
+| 120–365 days | Conference or capability hook (Option B/C) | "Genuine reason to be in touch" |
+| 365+ days (Aramco HQ-style relationship) | Capability + offer to meet (Option B/C) | Treat as semi-cold; show what's new |
+
+The hook is critical. A health-check email without a hook reads as "I'm chasing you" — recipient ignores. With a hook, it reads as "Maaz had a reason to think of me" — recipient engages.
+
+---
+
+## Operator review checklist before send
+
+- [ ] Last touch date verified (search Sent items, calendar, chats for the actual last interaction)
+- [ ] Last topic accurately summarized (not paraphrased from memory)
+- [ ] Hook is real — don't invent industry news; don't claim conference attendance unless confirmed
+- [ ] No false urgency ("would love to reconnect ASAP")
+- [ ] SRE internal owner CC'd (so internal team sees the re-engagement)
+- [ ] Customer contact email still current (not stale — verify against LinkedIn or recent inbound)
+- [ ] No reference to confidential / sale-process content
+- [ ] Length 60–100 words
+
+**Approved by**: ______________ **Date**: __________
+
+---
+
+## Anti-patterns
+
+- ❌ **"Just checking in!"** — empty, recipient learns nothing about why you're reaching out
+- ❌ **"Hope all is well"** opener — generic, not Maaz
+- ❌ **"Trust you've been keeping busy"** — small-talk filler
+- ❌ **Inventing industry news** — recipient will spot it
+- ❌ **"Following up on my previous emails"** — passive-aggressive; the recipient already knows
+- ❌ **Sending the same template to 10 silent customers in one batch** — they talk; if they compare emails, the formula shows
+- ❌ **Asking for an introduction to someone else** as the first contact after months of silence — too transactional
+
+---
+
+## Variant: dormant high-value customer (Aramco HQ-style)
+
+For relationships where the operator personally knows the contact and the silence is just calendar drift (not actual estrangement):
+
+- Personal opening: "Hope you and the family are well, {{FIRST_NAME}}."
+- Hook: industry-aware ("I saw {{NEWS}} — thought of you")
+- No subject sales language; this is a personal note that happens to be over email
+- Sign-off: `Best` (warmer than `Best regards`)
+- CC: typically none — keep it personal
+
+This is the R22-style quarterly HQ touchpoint. Don't pattern-match; each one should feel hand-written.
+
+---
+
+## Variant: customer mid-stale-deal (not silent — actively stalled)
+
+If the customer hasn't been silent — they've just been delayed on a specific decision — the email shape changes:
+
+- Don't open with "It's been a while" (factually wrong)
+- Open with the specific deal item: "Following up on {{SPECIFIC_DECISION_PENDING}}..."
+- Ask a specific question (not "checking in") — "Is there anything I can prepare to help unblock {{X}}?"
+- Use the AR-followup or NDA-chaser template instead, depending on what's pending

@@ -1,0 +1,104 @@
+# Deliverables Table Template
+
+The deliverables table is the most-scrutinized part of §4 Project Scope. Operators read this first; clients read this second. Get it specific.
+
+## Format
+
+| Deliverable | Description | Estimated Time |
+|---|---|---|
+| <short name> | <one-line specific description with stream/unit refs> | <X> days |
+
+## Common deliverable rows by service line
+
+Copy the rows that apply, then customize. Don't ship the template names verbatim — each row should reference the client's specific units/streams.
+
+### Performance studies (most common)
+
+| Deliverable | Description | Time |
+|---|---|---|
+| Pre-test meeting + Data Request Sheet | Align on test plan with {{CLIENT}} operations + engineering. DCS data inventory check. | 2 days |
+| Onsite sampling campaign | Sample acid gas at {{AG_STREAMS}}, tail gas at {{TG_STREAMS}}, condensate analysis where applicable. {{N}} runs over {{D}} days. | {{D}} days |
+| Symmetry™ process model | Calibrated against {{N}} samples and {{D}} days of DCS data. Sensitivity analysis on key variables. | 10 days |
+| Performance assessment report | Identifies bottlenecks, quantifies efficiency gap to design, recommends action items ranked by ROI. | 15 days |
+| Close-out call + Q&A | 90-min web meeting with {{CLIENT}} team to walk through findings + recommendations. | 1 day |
+
+### Training programs
+
+| Deliverable | Description | Time |
+|---|---|---|
+| Training needs assessment | Pre-course interview with {{CLIENT}} HR + technical lead. Identifies competency gaps + group composition. | 3 days |
+| Course curriculum customization | Tailor SRE standard curriculum (Operations Handbook Rev3) to {{CLIENT}} unit configuration. | 5 days |
+| Onsite delivery — Module 1 (Fundamentals) | 2-day classroom + plant walkdown. {{N}} participants. | 2 days |
+| Onsite delivery — Module 2 (Operations) | 2-day classroom + DCS scenario walkthroughs. | 2 days |
+| Onsite delivery — Module 3 (Troubleshooting + Health Check) | 2-day classroom + live unit health assessment. | 2 days |
+| Post-course materials + Q&A access | PDF curriculum + 90-day async Q&A support via email. | n/a |
+
+### Compliance / tendering work
+
+| Deliverable | Description | Time |
+|---|---|---|
+| Tender response document | Full {{TENDER_REF}} response per {{CLIENT}} format. | 10 days |
+| Bid bond + insurance documentation | SRE WCB + liability certs in {{CLIENT}}-required format. | 2 days |
+| Vendor registration package | {{TENDER_SYSTEM}} registration if not already current. | 5 days |
+| Technical clarifications response | Reply to clarification questions during tender review. | as-needed |
+
+### Engineering studies / design reviews
+
+| Deliverable | Description | Time |
+|---|---|---|
+| HAZOP support | Review HAZOP nodes with focus on SRU/TGTU. Identify high-priority recommendations. | 5 days |
+| Performance debottlenecking study | Symmetry model + cost-benefit analysis of {{N}} debottlenecking options. | 25 days |
+| Equipment review | Mechanical drawing review for {{EQUIPMENT_LIST}}. Identify obsolescence + replacement parts. | 10 days |
+| Sulfur recovery efficiency improvement memo | Targeted recommendations to improve {{CLIENT}}'s SRE from {{X}}% to {{Y}}%. | 15 days |
+
+### Capital projects (revamps, expansions)
+
+| Deliverable | Description | Time |
+|---|---|---|
+| Conceptual design package | Process flow diagram + heat-and-mass balance + equipment list. | 30 days |
+| Basic engineering | P&IDs, datasheets, plot plan, hydraulics, capital cost estimate (±30%). | 60 days |
+| Procurement support | Vendor inquiry packages + bid evaluation + recommendation. | 30 days |
+| Construction support | RFI responses + field engineering during construction. | as-needed |
+| Commissioning support | Onsite startup assistance + first-fill assistance. | 14 days onsite |
+
+---
+
+## Estimation rules of thumb
+
+These are not in the proposal — they're for the drafter to calibrate estimates.
+
+- **Pre-test work + Data Request Sheet**: minimum 2 days regardless of project size
+- **Onsite sampling**: 1 day per RF/condenser pair tested, minimum 4 onsite days for travel justification
+- **Symmetry model build**: 5 days for re-tune of existing model; 10-15 days for new model build
+- **Performance report**: 1-2 days per recommendation item · typical 5-8 recommendations → 10-15 days
+- **Training course delivery**: classroom-day = 1 SRE engineer-day; plant walkdown adds 0.5 days
+- **Tender response**: 5-10 days depending on complexity; bid bond docs add 2 days
+- **HAZOP support**: 1 day prep per HAZOP day attended
+- **Conceptual design**: 4-6 weeks engineering time
+- **Basic engineering**: 8-12 weeks engineering time (parallel to procurement)
+
+When in doubt, **estimate high and offer to discuss**. Underestimating is worse than overestimating — it leads to overtime invoices, late deliveries, and client dissatisfaction.
+
+---
+
+## Total row
+
+End the table with a totals row when total > 30 days:
+
+| **Total estimated project duration** | | **{{TOTAL}} days** |
+
+For projects > 60 days, also show a Gantt-style milestone block (operator can fill this in during review):
+
+```
+M1   M2   M3   M4   M5   M6
+[==Pre==][===Onsite==][===Modeling===][==Report==][==Reviews==]
+```
+
+---
+
+## Anti-patterns
+
+- **Vague descriptions** — "Conduct study" tells the client nothing. "Sample 4 streams over 4 days, build calibrated Symmetry model, produce 8-recommendation report" tells them everything.
+- **Round-number padding** — "30 days" reads as estimated; "27 days" reads as calculated. Use the calculation if possible.
+- **Hidden time** — never bury travel days or close-out days under "Onsite sampling". Make every line item visible.
+- **Client-specific names in template** — if you forget to swap `{{CLIENT}}` for the real client name, the proposal looks copy-pasted. Final review step is `grep -i '{{' proposal.md` to catch.

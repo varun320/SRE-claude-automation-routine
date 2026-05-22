@@ -1,0 +1,170 @@
+---
+# ============================================================
+# ROUTINE SPEC — copy to routines/<R-ID>-<slug>.md and fill in
+# Schema reference: ~/.claude/skills/tenant-routine-author/references/routine-spec-schema.md
+# ============================================================
+
+id: R0                                  # NEEDS_INPUT — operator-facing id
+slug: NEEDS_INPUT                       # kebab-case
+client_slug: NEEDS_INPUT
+status: draft                           # always start as draft
+created: YYYY-MM-DD
+last_updated: YYYY-MM-DD
+pilot_revision: 0
+
+schedule:
+  cron: "0 13 * * 1-5"                  # NEEDS_INPUT — crontab format
+  timezone: America/Edmonton            # NEEDS_INPUT — IANA, match operator's mailbox tz
+  hard_anchors_respected: true
+
+scope:
+  mailboxes: ["operator@client.com"]    # NEEDS_INPUT — start tight
+  toRecipients_filter: true             # default true; flip with explicit operator approval
+  window_hours_back: 24                 # NEEDS_INPUT
+  customer_keywords_source: client-config.yaml#customer_keywords
+  exclude_senders:
+    - "linkedin.com"
+    - "alarm.com"
+    - "*-noreply@*"
+  include_keywords: []
+  exclude_keywords: []
+
+trigger_event_hints: []
+# Format:
+# trigger_event_hints:
+#   - { regex: '(?i)\b(po\s*signing|po\s*approved)\b', severity: closing_event }
+#   - { regex: '(?i)\b(rfq|rfp|tender)\b',             severity: rfq_received }
+
+output:
+  channel: local_file                   # default during pilot
+  channel_target: "routines/output/{R-ID}-{date}.md"
+  format: structured-summary            # structured-summary | bullet-list | one-line | note-file
+  recipients: ["operator@client.com"]
+
+safety:
+  read_only: true                       # ALWAYS true for v0 of a new routine
+  write_actions: []                     # empty until operator explicitly approves writes
+  confidential_topics_redacted: []      # populate from client-config.confidentiality
+
+budget:
+  max_graph_calls: 50
+  max_runtime_seconds: 120
+  max_output_chars: 4000
+
+observability:
+  log_file: "routines/logs/{R-ID}-{date}.json"
+  log_keep_days: 90
+  metric_signal: "NEEDS_INPUT — e.g. 'escalation rate < 30%' or 'output produced when expected'"
+
+acceptance:                             # NEEDS_INPUT — at least 2 yes/no questions
+  - "First 5 runs reviewed by operator within 24h"
+  - "False positive rate < 20% across first 10 runs"
+  - "Operator confirms 'this saved me time' by week 2"
+
+graduates_to_active_when:
+  - "10 consecutive runs without operator pushback"
+  - "All acceptance criteria met"
+
+retires_when:
+  - "3 pilot revisions without meeting acceptance"
+  - "Operator explicitly requests retire"
+
+linked_audit_findings: []
+# Format:
+# linked_audit_findings:
+#   - "audits/<client>-<date>/data/tenant-summary.json#openQuestions.OQ-05"
+
+owner: "NEEDS_INPUT"                    # operator name
+co_owner: "NEEDS_INPUT"                 # whoever maintains the routine
+---
+
+# {R-ID} · {Routine name}
+
+## Why this exists
+
+NEEDS_INPUT — one paragraph linking back to the audit finding, operator quote, or pain point.
+
+Quote from operator: > "..."
+
+Audit reference: `audits/<client>-<date>/data/...#...`
+
+## What it does
+
+NEEDS_INPUT — step-by-step pseudocode of the runtime behavior. Concrete enough that
+a fresh Claude session could re-implement it from this section alone.
+
+```
+1. Check hard-anchors → exit if within prayer/family/sleep window
+2. mcp__ms365__list-mail-folder-messages on scope.mailboxes
+   - mailFolderId=<Inbox-id-for-scoped-mailbox>
+   - top=N
+   - orderby="receivedDateTime desc"
+   - select="id,subject,from,toRecipients,receivedDateTime,..."
+   - filter receivedDateTime > now - scope.window_hours_back
+3. Filter: exclude_senders, exclude_keywords
+4. For each remaining message:
+   - Match against trigger_event_hints
+   - If match: add to escalations
+5. Format escalations per output.format
+6. Write to output.channel_target
+7. Append run log to observability.log_file
+```
+
+## Good output example
+
+NEEDS_INPUT — a real example of what the routine produces when working correctly.
+
+```
+2026-05-21 NA Inbox Scan · 13:00 MT · 47 inbound · 3 escalations
+
+1. [closing_event] Aramco / SRU-1 Onsite Testing — PO Signing
+   from yunus@aimsgt.com · attachments: 2 · 9:00 MT
+2. [rfq_received] Phillips 66 Rodeo Sulfur Plant — GC Testing RFQ
+   from drew@gp-solutions.ca · 6:30 MT
+3. [ar_followup] Tüpraş Online — Account Reconciliation 03/2026 reminder #5
+   to ashleyh@acme.com · 5:30 MT
+```
+
+## Bad output example
+
+NEEDS_INPUT — what failed output looks like (false positive, wrong scope, etc).
+
+```
+2026-05-21 NA Inbox Scan · 13:00 MT · 47 inbound · 18 escalations
+
+1. [closing_event] LinkedIn Newsletter: "Doing business in China"
+   ← false positive: subject regex matched "business" near "approved"
+2. [rfq_received] alarm.com: SRE was Disarmed by Ashley Hartt at 8:05 AM
+   ← false positive: noise sender not in exclude list
+...
+```
+
+Triage steps when bad output appears:
+- Confirm scope.exclude_senders includes all the noise senders surfaced
+- Check trigger_event_hints regex for over-broad matches
+- Verify toRecipients_filter is doing what's expected
+
+## Edge cases
+
+NEEDS_INPUT — known weird cases. Examples to seed:
+
+- **Cross-mailbox pollution**: if the operator has full-mailbox-access to other users (see audit OQ-16), `toRecipients_filter: true` is mandatory or output will include LinkedIn newsletters addressed to a colleague.
+- **Sale-process redaction**: if a `confidential_customers` entry matches, the output must say "REDACTED — confidential customer" instead of the customer name. Channel must be operator-private.
+- **Holiday weeks**: low inbound volume can produce "0 escalations" output that looks like the routine is broken. Add a "low-volume week" annotation when items_in_window < 10.
+- **Name collisions**: e.g., operator "Maaz" vs partner contact "Maaz Khan@aims" — disambiguate by domain, not name.
+
+## Rollback
+
+If the routine starts misbehaving:
+
+1. **Quick pause**: flip `status: paused` in this file. Cron stops next tick.
+2. **Investigate**: read latest `observability.log_file` entries. Look for budget overruns, error counts, escalation-rate anomalies.
+3. **Iterate**: bump `pilot_revision`, adjust scope/budget/triggers, restart as pilot.
+4. **Retire if 3 revisions don't help**: see lifecycle docs for the retirement note format.
+
+Surface that breaks if this routine stops running:
+NEEDS_INPUT — e.g., "operator loses the daily NA inbox summary; reverts to manual triage taking ~30 min/morning."
+
+## Pilot revision history
+
+- **v0** (YYYY-MM-DD): Initial spec, status: draft.

@@ -1,0 +1,71 @@
+---
+status: draft
+scenario: proposal_cover
+to: ["{{AIMS_OR_DIRECT_CONTACT_EMAIL}}"]
+cc: ["{{AIMS_SENIOR_CC}}", "{{SRE_INTERNAL_OWNER}}"]
+bcc: []
+subject: "DRAFT for your approval - {{CUSTOMER_NAME}} ({{CUSTOMER_CONTACT_NAME}}): {{PROPOSAL_TOPIC}}"
+attachments: ["{{PATH_TO_PROPOSAL_PDF}}"]
+drafted_by: "Claude · sre-email-drafter"
+drafted_on: {{YYYY-MM-DD}}
+aims_routed: true                          # set false for direct-to-customer (NA/EU/non-bridged)
+aims_contact: "{{AIMS_CONTACT_NAME}}"
+end_customer: "{{CUSTOMER_NAME}} · {{CUSTOMER_CONTACT_NAME}}"
+proposal_reference: "SRE-{{PROPOSAL_NUMBER}}"
+estimated_value: "{{CURRENCY}} {{AMOUNT}}"
+review_status: pending_operator_review
+---
+
+Hi {{AIMS_CONTACT_FIRST_NAME}},
+
+{{OPENING_LINE_REFERENCING_PRIOR_CONTEXT — e.g. "Following our discussion on 2026-05-13 about Sanjay's request" / "Per the RFQ from Q-Chem received on 2026-05-11"}}.
+
+Attached is the proposal draft for **{{CUSTOMER_NAME}}** on **{{PROPOSAL_TOPIC}}** (Ref: SRE-{{PROPOSAL_NUMBER}}). Key elements for your review:
+
+- {{HIGHLIGHT_1 — e.g. "Symmetry model calibrated against the last 90d DCS data"}}
+- {{HIGHLIGHT_2 — e.g. "6-day onsite campaign covering streams AG-101 and AG-102"}}
+- {{HIGHLIGHT_3 — e.g. "Estimated USD 145,000 fixed-price + onsite hourly rate per standard terms"}}
+
+{{OPTIONAL_TIMING_OR_CONSTRAINT_LINE — e.g. "Tender deadline is 2026-08-15, so I'd like to confirm scope this week if possible."}}
+
+Let me know if anything needs adjustment before this goes to {{CUSTOMER_CONTACT_NAME}}.
+
+Thanks,
+Maaz
+
+--
+Maaz Ahmed Shareef
+Sulfur Recovery Engineering Inc.
+maaz@sulfurrecovery.com
++1 (XXX) XXX-XXXX
+www.sulfurrecovery.com
+
+---
+
+## Operator review checklist before send
+
+- [ ] Recipient email is correct AIMS contact per `aims-routing-map.md`
+- [ ] Subject line follows `DRAFT for your approval - <Customer> (<Contact>): <Topic>` pattern
+- [ ] Attachment path resolves and the PDF is the right version
+- [ ] All `{{HIGHLIGHT_N}}` placeholders replaced with real values
+- [ ] No `{{PLACEHOLDER}}` tokens remain
+- [ ] Estimated value matches the proposal's §8 Payment Terms section
+- [ ] CC list is right (AIMS senior + SRE internal owner — not end-customer at this stage)
+- [ ] Length 100–180 words
+
+**Approved by**: ______________ **Date**: __________
+
+---
+
+## Variant: direct-to-customer (no AIMS bridge)
+
+For NA / EU / non-bridged customers (Phillips 66, INERCO, WE Soda, CSV Midstream, etc.), the routing changes:
+
+- **To**: customer technical contact (direct)
+- **CC**: SRE internal owner (Ron for BD, Chuck for US-region, Dharmesh for engineering)
+- **Subject**: `{{CUSTOMER_NAME}}: {{PROPOSAL_TOPIC}} - Proposal SRE-{{PROPOSAL_NUMBER}}` (drop "DRAFT for your approval")
+- **Opening**: address the customer contact directly, not "Hi {{AIMS_CONTACT}}"
+- **Body**: change "for your review before this goes to {{CUSTOMER}}" → "for your review and feedback"
+- **Sign-off**: `Best regards,` instead of `Thanks,`
+
+The frontmatter `aims_routed: false` flag flips the routing logic.

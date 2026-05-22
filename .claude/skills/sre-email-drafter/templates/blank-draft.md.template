@@ -1,0 +1,70 @@
+---
+status: draft
+scenario: ad_hoc                           # CHANGE this to match the new scenario you're documenting
+to: ["{{RECIPIENT_EMAIL}}"]
+cc: []
+bcc: []
+subject: "{{SUBJECT_LINE_FOLLOWING_SUBJECT_CONVENTIONS_MD}}"
+attachments: []
+drafted_by: "Claude · sre-email-drafter"
+drafted_on: {{YYYY-MM-DD}}
+aims_routed: {{TRUE_OR_FALSE}}
+end_customer: "{{CUSTOMER_NAME_OR_INTERNAL}}"
+review_status: pending_operator_review
+---
+
+{{SALUTATION — e.g., "Hi {{FIRST_NAME}}," for direct, "Dear Sir/Madam," for tender, no salutation for internal short notes}}
+
+{{OPENING_LINE — reference prior context or direct topic; never generic warmth}}
+
+{{BODY — keep it short. 80-150 words total for most scenarios.}}
+
+{{ASK_OR_NEXT_STEP — what should the recipient do or know next?}}
+
+{{SIGN_OFF — "Best regards," for external / "Thanks," for AIMS or internal / "Best," for warm direct customer}}
+Maaz
+
+--
+Maaz Ahmed Shareef
+Sulfur Recovery Engineering Inc.
+maaz@sulfurrecovery.com
++1 (XXX) XXX-XXXX
+
+---
+
+## When to use this template
+
+Only when none of the prebuilt scenarios match:
+
+- ✅ Use this for: a novel one-off scenario
+- ❌ Don't use this for: scenarios that already have templates (proposal cover, AR follow-up, etc.) — use those instead
+
+## After drafting
+
+If the new scenario is something you'll encounter again, **promote it to a named template** in `templates/` so future drafts inherit the structure:
+
+1. Save the draft as `templates/<new-scenario-slug>.md.template`
+2. Generalize the customer-specific values into `{{PLACEHOLDER}}` tokens
+3. Add a "When to use this template" section
+4. Add an "Operator review checklist" section
+5. Update `SKILL.md`'s scenario-keyword table to route future requests to the new template
+
+This is how the template library grows — every novel email becomes a reusable asset.
+
+---
+
+## Operator review checklist before send
+
+(Adapt per scenario — these are the universal checks)
+
+- [ ] Recipient email correct
+- [ ] Subject follows `references/subject-line-conventions.md`
+- [ ] Opening references prior context, not generic warmth
+- [ ] All `{{PLACEHOLDER}}` tokens replaced
+- [ ] Sign-off matches recipient relationship
+- [ ] Signature block present (drop for internal)
+- [ ] Length within scenario norms (60–250 words)
+- [ ] No confidential content
+- [ ] AIMS routing respected if ME customer
+
+**Approved by**: ______________ **Date**: __________

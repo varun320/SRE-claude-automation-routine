@@ -1,0 +1,84 @@
+---
+status: draft
+scenario: ar_followup
+to: ["{{CUSTOMER_AR_CONTACT_EMAIL}}"]
+cc: ["ashleyh@sulfurrecovery.com"]
+bcc: []
+subject: "{{CUSTOMER_NAME}} - Invoice {{INVOICE_NUMBER}} - Reminder #{{N}}"
+attachments: []                            # optional: ["invoices/INV-{{INVOICE_NUMBER}}.pdf"] if re-attaching
+drafted_by: "Claude · sre-email-drafter"
+drafted_on: {{YYYY-MM-DD}}
+aims_routed: false                         # AR typically direct, even for ME customers
+end_customer: "{{CUSTOMER_NAME}}"
+invoice_number: "{{INVOICE_NUMBER}}"
+amount: "{{CURRENCY}} {{AMOUNT}}"
+days_overdue: {{N_DAYS}}
+reminder_count: {{N}}
+last_reminder_date: "{{YYYY-MM-DD}}"
+review_status: pending_operator_review
+---
+
+Hi {{CUSTOMER_AR_CONTACT_FIRST_NAME}},
+
+Following up on Invoice **{{INVOICE_NUMBER}}** ({{CURRENCY}} {{AMOUNT}}) which is currently **{{N_DAYS}} days past due**.
+
+{{IF_N_EQUALS_1: "This is the first follow-up — could you confirm receipt and let me know the expected payment date?"}}
+{{IF_N_BETWEEN_2_AND_4: "This is reminder #{{N}}. Our last contact was on {{LAST_REMINDER_DATE}}. Could you please confirm where this stands?"}}
+{{IF_N_GREATER_THAN_4: "This is reminder #{{N}}. Given the time elapsed, I'd appreciate a status update by {{DEADLINE_DATE}} or a call to discuss."}}
+
+{{OPTIONAL_PAYMENT_DETAIL_LINE — e.g. "Wire details are on the invoice; if anything was unclear or if you need it re-sent, just let me know."}}
+
+Thanks,
+Maaz
+
+--
+Maaz Ahmed Shareef
+Sulfur Recovery Engineering Inc.
+maaz@sulfurrecovery.com
++1 (XXX) XXX-XXXX
+
+---
+
+## Escalation cadence (from observed audit patterns)
+
+| Reminder # | Days overdue | Tone | Action |
+|---|---|---|---|
+| #1 | 0–7 days past due | Polite confirmation request | Send |
+| #2 | 8–21 days | Direct, asking for status | Send + Ashley CC'd |
+| #3 | 22–45 days | Firm, requesting expected pay date | Send + Ashley CC'd + log in tracker |
+| #4 | 46–90 days | Escalate, ask for call | Send + suggest CFO Day call |
+| #5+ | 90+ days | Operator must personally call | Skip skill — operator handles via phone |
+
+Real example from audit: `FW: (Reminder-5-) Tüpraş Online - Account Reconciliation 03/2026` — by reminder #5, Maaz is forwarding the original chain to Ashley for tracking, not just emailing again.
+
+---
+
+## Operator review checklist before send
+
+- [ ] Invoice number and amount verified against Project Tracker xlsx
+- [ ] Reminder count `{{N}}` matches actual count of prior reminders (search Sent items)
+- [ ] Days-overdue calculation correct ({{TODAY}} - invoice_due_date)
+- [ ] Customer AR contact email is current (not stale from a year ago)
+- [ ] Ashley CC'd
+- [ ] No threatening language (collections-agency tone is for legal, not Maaz)
+- [ ] No mention of 4% interest charge unless customer is at #5+ AND operator says to include
+- [ ] Length 60–100 words
+
+**Approved by**: ______________ **Date**: __________
+
+---
+
+## Variant: year-end audit confirmation reply
+
+When an external auditor (or AIMS finance) requests balance confirmation as of 31.12.YYYY, the response is different — use `year-end-audit-confirmation.md.template` instead. Don't conflate audit confirmations with AR follow-ups.
+
+---
+
+## Variant: AIMS-routed AR
+
+For Aramco / ADNOC / KNPC / SATORP / etc. where AIMS invoices the client and SRE invoices AIMS:
+
+- **To**: AIMS finance contact (Fazal or Junaid, depending on which one handles that customer)
+- **CC**: Ashley
+- Subject: `AIMS: SRE Invoice {{INVOICE_NUMBER}} - Reminder #{{N}}`
+- Body: chase AIMS for the SRE-to-AIMS payment, not the AIMS-to-client payment

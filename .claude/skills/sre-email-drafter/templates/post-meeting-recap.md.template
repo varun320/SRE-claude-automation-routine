@@ -1,0 +1,107 @@
+---
+status: draft
+scenario: post_meeting_recap
+to: ["{{ATTENDEE_1_EMAIL}}", "{{ATTENDEE_2_EMAIL}}"]
+cc: ["{{SRE_INTERNAL_NOT_IN_MEETING}}"]
+bcc: []
+subject: "{{MEETING_TOPIC}} - notes and action items - {{MEETING_DATE}}"
+attachments: []
+drafted_by: "Claude · sre-email-drafter"
+drafted_on: {{YYYY-MM-DD}}
+aims_routed: false                         # depends — if meeting was AIMS-bridged, AIMS contacts are already in To:
+meeting_date: "{{YYYY-MM-DD}}"
+meeting_topic: "{{MEETING_TOPIC}}"
+attendees: ["{{NAME_1}}", "{{NAME_2}}"]
+review_status: pending_operator_review
+---
+
+Hi all,
+
+Thanks for the time on {{MEETING_DATE}}. Quick notes and action items from our {{MEETING_TOPIC}} discussion:
+
+**Decisions:**
+- {{DECISION_1}}
+- {{DECISION_2}}
+
+**Action items:**
+| # | Action | Owner | Due |
+|---|---|---|---|
+| 1 | {{ACTION_1}} | **{{OWNER_1}}** | {{DUE_1}} |
+| 2 | {{ACTION_2}} | **{{OWNER_2}}** | {{DUE_2}} |
+| 3 | {{ACTION_3}} | **{{OWNER_3}}** | {{DUE_3}} |
+
+**Open items (not resolved today):**
+- {{OPEN_1}}
+- {{OPEN_2}}
+
+**Next meeting:** {{NEXT_MEETING_DATE_OR_TBD}}
+
+Let me know if I missed or misstated anything — happy to revise.
+
+Best regards,
+Maaz
+
+--
+Maaz Ahmed Shareef
+Sulfur Recovery Engineering Inc.
+maaz@sulfurrecovery.com
++1 (XXX) XXX-XXXX
+
+---
+
+## Why post-meeting recaps matter
+
+Audit finding: SRE meetings produce action items in conversation but they evaporate by the next morning. A written recap within 24h:
+
+1. **Pins the action items in writing** — accountability anchor
+2. **Surfaces misunderstandings early** — recipients correct mis-recorded decisions before they propagate
+3. **Creates a paper trail** for project tracking + AIMS handoff
+4. **Signals professionalism** to the customer side
+
+Send within 24h of the meeting. Beyond 24h, the recap loses 80% of its value.
+
+---
+
+## Operator review checklist before send
+
+- [ ] All meeting attendees in To: (cross-check against calendar event attendees)
+- [ ] SRE internal stakeholders not in the meeting CC'd
+- [ ] All action items have **named owners** (not "team" or "we'll figure out")
+- [ ] All action items have **specific due dates** (not "next week", not "ASAP")
+- [ ] Decisions accurately reflect what was actually agreed (operator's memory or recording confirms)
+- [ ] Open items list captures what was deliberately deferred (not what was just unfinished)
+- [ ] Next meeting date confirmed or marked TBD
+- [ ] No content that's confidential to a sub-set of attendees (if so, split into two recaps)
+- [ ] Length 150–250 words
+
+**Approved by**: ______________ **Date**: __________
+
+---
+
+## Variants
+
+### Variant A: AIMS-bridged meeting (Aramco / ADNOC / Q-Chem / etc.)
+
+- **To**: AIMS attendees + customer attendees (per the meeting attendee list)
+- **CC**: SRE internal stakeholders not in the meeting
+- Lead with thanks to both AIMS and customer side
+- Action items should clearly distinguish SRE-owned vs AIMS-owned vs customer-owned
+
+### Variant B: Internal SRE meeting (Bi-Weekly Job, Pit Stop, etc.)
+
+- **To**: SRE attendees only
+- **CC**: Operator (for record)
+- Drop signature block; just "Maaz"
+- Tone shifts from "Best regards" to "Thanks" — internal
+- Action items typically smaller scope (project-level, not customer-level)
+
+### Variant C: One-on-one (Maaz × Ron, Maaz × Torstein, Maaz × Ashley)
+
+- Skip the formal recap entirely if both parties already capture in their own logs
+- Use this template only if there were ≥ 3 distinct decisions/actions
+- **To**: the 1:1 partner only
+- Drop the table; use bullets
+
+### Variant D: Confidential meeting (sale-process, Torstein 1:1, board prep)
+
+- **STOP. Don't use this skill.** Sale-process recaps need a different (manual) workflow because the recap itself is confidential. Notes go to operator-private file, not email.
