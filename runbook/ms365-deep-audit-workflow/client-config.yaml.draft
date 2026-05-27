@@ -1,39 +1,58 @@
 # client-config.yaml — DRAFT for Sulfur Recovery Engineering Inc. (SRE)
 # ---------------------------------------------------------------------
-# Pre-filled from `SRE Claude Routines - Execution Plan.md` + industry context.
+# Pre-filled from `SRE Claude Routines - Execution Plan.md` + industry context
+# + Maaz's 2026-05-26 decision answers (see docs/decisions/2026-05-26-maaz-phase1-decisions.md).
 # Source-of-truth file every audit stage reads.
 # Each `# 🟢/🟡/🔴` tag marks how the value was derived (see 00-discovery-questionnaire.md):
-#   🟢 CONFIRMED from Execution Plan
+#   🟢 CONFIRMED from Execution Plan or Maaz's 2026-05-26 answers
 #   🟡 INFERRED — review with Maaz
 #   🔴 NEEDS MAAZ — placeholder, must be replaced before run
 #
-# After Maaz review, rename this file to `client-config.yaml` and remove this header block.
+# Still .draft because three Mohammad-side items remain open
+# (Inshan MS account state, Talha + post-Nov 2025 hires, webapp scoping).
+# Rename to client-config.yaml once those are resolved.
+
+linked_decisions:
+  - "docs/decisions/2026-05-26-maaz-phase1-decisions.md"   # 🟢 authoritative
 
 client: sulfur-recovery-engineering          # 🟢
 client_slug: sre                              # 🟢
-audit_date: 2026-05-21                        # 🟢 (today)
+audit_date: 2026-05-21                        # 🟢
 operator_name: "Maaz Ahmed Shareef"          # 🟢
+operator_role: "CEO / General Manager"       # 🟢 per D1 (MS directory keeps "Analyzer Expert" for technical context)
 
 # ============================================================
 # 1. TENANT + IDENTITY
 # ============================================================
 tenant:
-  primary_domain: "REPLACE_ME.com"            # 🔴  e.g. sulfurrecovery.com
+  primary_domain: "sulfurrecovery.com"        # 🟢
   internal_personal_aliases: []               # 🔴  if any staff use personal addresses for SRE work
 
 in_scope_mailboxes_full:                      # full mailbox + calendar reads
-  - "maaz@REPLACE_ME.com"                     # 🟢
+  # 🟢 — Maaz also has full-mailbox-access to dongreen@ and inshanm@ (audit OQ-16)
+  # but per D6, Don's and Inshan's mailboxes are OUT of scope for daily inbox summary routines.
+  - "maaz@sulfurrecovery.com"                 # 🟢
 
-in_scope_users_metadata:                      # directory-only, no bodies
-  # 🟡 — derived from Execution Plan; populate UPN after stage 1 enumeration
-  - { displayName: "Maaz Ahmed Shareef", role: "CEO/GM" }
-  - { displayName: "Zaheer Juddy",        role: "Group CEO / Shareholder",        is_external: true }
-  - { displayName: "Ashley",              role: "Admin / HR / bank" }
-  - { displayName: "Talha",               role: "ME technical / conferences" }
-  - { displayName: "Dharmesh",            role: "Engineering" }
-  - { displayName: "Utsav",               role: "Technical writing" }
-  - { displayName: "Inshan",              role: "Qatar/Kuwait compliance" }
-  - { displayName: "Ron",                 role: "BD / clients (NA)" }
+in_scope_users_metadata:                      # directory-only, no bodies — per D4 (SRE DD Section 12, Nov 2025)
+  # Board of Directors
+  - { displayName: "Mohammed Maaz Ahmed Shareef", role: "Director (Board)" }
+  - { displayName: "Zaheer Juddy",        role: "Director (Board) · Parent: ZSL Canada Holding Corp.", is_external: false }
+  # Executive Leadership
+  - { displayName: "Maaz Ahmed Shareef",  role: "General Manager / CEO" }
+  # Reports directly to GM/CEO
+  - { displayName: "Chuck Stephenson",    role: "General Manager, USA" }
+  - { displayName: "Dharmesh Patel, P.Eng.", role: "Principal Process Engineer" }
+  - { displayName: "Ron Armstrong, P.Eng.",  role: "Senior Engineer / Business Development" }
+  - { displayName: "Ashley Hartt",        role: "Administration & Health/Safety Representative" }
+  # Reports to Principal Engineer (Dharmesh)
+  - { displayName: "Utsav Chovatia, EIT",    role: "Process Engineer",     reports_to: "Dharmesh Patel" }
+  - { displayName: "Kunal Rajput, EIT",      role: "Process Engineer",     reports_to: "Dharmesh Patel" }
+  - { displayName: "Sharukh Ali",            role: "Process Engineer",     reports_to: "Dharmesh Patel" }
+  - { displayName: "Kurtis Marshall",        role: "Junior Engineer",      reports_to: "Dharmesh Patel" }
+  - { displayName: "Hardik Lunagariya",      role: "Junior Engineer / Student", reports_to: "Dharmesh Patel" }
+  # Pending reconciliation per D2 / D4 open items
+  - { displayName: "Inshan",                 role: "Qatar/Kuwait compliance", status_pending: "OPEN-A: align with HR record" }
+  - { displayName: "Talha",                  role: "ME technical / conferences", status_pending: "OPEN-B: confirm AIMS vs SRE payroll" }
 
 aims_partners:                                # AIMS members (likely tenant guests OR external)
   # 🟢
@@ -45,7 +64,17 @@ aims_partners:                                # AIMS members (likely tenant gues
   - { name: "Fazal" }
   - { name: "Majid" }
 
-shared_mailboxes: []                          # 🔴  e.g. [ar@..., info@..., tenders@...]
+shared_mailboxes:                             # 🟢 per D7 — all 10, last one disabled (excluded from live sweep)
+  - { address: "ar@sulfurrecovery.com",            purpose: "accounts receivable" }
+  - { address: "ap@sulfurrecovery.com",            purpose: "accounts payable" }
+  - { address: "info@sulfurrecovery.com",          purpose: "company-wide signal" }
+  - { address: "info-me@sulfurrecovery.com",       purpose: "Middle East regional signal" }
+  - { address: "sales@sulfurrecovery.com",         purpose: "sales inbox" }
+  - { address: "careers@sulfurrecovery.com",       purpose: "hiring" }
+  - { address: "apple@sulfurrecovery.com",         purpose: "apple-ecosystem device coordination" }
+  - { address: "HusamsBookingPageSRE@sulfurrecovery.com", purpose: "booking page" }
+  - { address: "boardroom@sulfurrecovery.com",     purpose: "board / governance" }
+  - { address: "scanner@sulfurrecovery.com",       purpose: "legacy scanner mailbox", status: "disabled", excluded_from_live_sweep: true }
 
 excluded_users: []                            # 🔴
 
@@ -76,10 +105,17 @@ known_top_customers:
   - { name: "SATORP",            region: "KSA", domains: ["satorp.com"] }       # 🟡
   - { name: "Oryx GTL",          region: "Qatar", domains: ["oryxgtl.com.qa"] } # 🟡
 
-confidential_customers:
-  # 🟢 — sale-process buyer + advisors get extra redaction
-  - { type: "sale_process_buyer", redact_in_dashboards: true }
-  - { type: "sale_process_advisor", redact_in_dashboards: true }
+confidential_material:                        # 🟢 per D10 (replaces former sale_process_buyer / advisor redaction)
+  # SRE sale process ended 2026-05-26. The folder remains confidential under the broader framing.
+  description: "Sensitive corporate / financial / HR / board material — never surface in any routine output."
+  scope:
+    - "SRE DD folder contents (OneDrive)"
+    - "Torstein 1:1 meeting subjects + notes"
+    - "P&L content (any form)"
+    - "Board-prep material"
+    - "Section 12 — HR and Benefits.docx (and related DD HR docs)"
+  redact_in_dashboards: true
+  redact_in_routine_outputs: true
 
 # ============================================================
 # 3. NAMING CONVENTIONS
@@ -112,13 +148,13 @@ file_locations:
 # ============================================================
 service_lines:
   # 🟡 — industry standard for sulfur-recovery EPC; Maaz confirms
+  # 🟢 sale_process removed 2026-05-26 per D10 (sale process ended)
   - capital_project          # new SRU build, train expansion
   - revamp                   # high-volume existing-unit modifications
   - engineering_study        # performance audit, HAZOP, optimization
   - field_service            # startup, commissioning, troubleshooting
   - training                 # operator + engineering
   - catalyst_spare_supply    # if applicable
-  - sale_process             # 🟢 the company itself is being sold; treat as a dedicated track
 
 # ============================================================
 # 5. SALES-CYCLE STAGES (used by stage 9 inference)
@@ -212,7 +248,8 @@ excluded_customers: []                       # 🔴
 ocr_attachments: false                        # 🟢 default OFF; opt-in only
 
 confidentiality:
-  redact_sale_process_buyer: true             # 🟢
+  # 🟢 per D10 — broader framing replaces former sale-process-specific redaction
+  redact_sensitive_corporate_material: true   # SRE DD / Torstein 1:1 / P&L / board prep (see confidential_material above)
   redact_named_customers_in_external_export: true  # 🟡
 
 # ============================================================
@@ -257,7 +294,8 @@ pain_points:
   - "ME accounts forget accountability when CRM logging is delayed >24h"
   - "AR aging needs to be pre-staged for Thursday CFO day (R12)"
   - "Aramco HQ touchpoints fall through quarterly (R22)"
-  - "Sale-process is highest-stakes file — needs weekly written memo (R9)"
+  # Sale-process pain point removed 2026-05-26 per D10. R9 retains its "weekly written memo" purpose
+  # but its topic shifts to whichever file is highest-stakes at the time.
 
 # ============================================================
 # END
