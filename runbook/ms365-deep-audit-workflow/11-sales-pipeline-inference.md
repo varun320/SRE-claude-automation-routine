@@ -1,5 +1,7 @@
 # Stage 9 — Sales Pipeline Inference
 
+> **⚠️ DECISION OVERRIDE 2026-05-26:** Where this stage references R9 as "Sale-Process Memo" or links sales-pipeline output to sale-process tracking, that framing is superseded. R9's purpose (weekly written memo of the highest-stakes file) remains valid but its topic is no longer assumed to be the sale. See [`docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10`](../../docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10).
+
 **Purpose.** Reconstruct a sales pipeline — prospect → proposal → won/lost stages with values + dates — even though SRE has no CRM. Combine the explicit signal from the SharePoint Jobs Tracker (if it exists) with the implicit signals from mail + documents + meetings.
 
 **Pre-requisite.** Stage 8 (`customer-360.json`) complete.

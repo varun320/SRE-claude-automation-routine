@@ -1,5 +1,7 @@
 # MS365 Deep Audit Workflow — Master Runbook
 
+> **⚠️ DECISION OVERRIDE 2026-05-26:** SRE sale process ended. Every reference to "sale process", "sale-process buyer", "Sale-Process Memo" (R9), or related confidentiality framing in this runbook is superseded by [`docs/decisions/2026-05-26-maaz-phase1-decisions.md`](../../docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10). The broader framing is *"Sensitive corporate / financial / HR / board material — never surface in any output."*
+
 **Status:** PLAN. Nothing in this directory has been executed yet. All pullers + generators described here are designed but not implemented.
 **Owner:** Mohammad (operator) for **Maaz Ahmed Shareef / Sulfur Recovery Engineering Inc. (SRE)**.
 **Target tenant:** the Microsoft 365 tenant that backs SRE.

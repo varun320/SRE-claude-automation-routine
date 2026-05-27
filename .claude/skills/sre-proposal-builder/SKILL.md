@@ -5,6 +5,8 @@ description: Build engineering proposals for Sulfur Recovery Engineering (SRE) a
 
 # SRE Proposal Builder
 
+> **⚠️ DECISION OVERRIDE 2026-05-26:** Any guidance below referring to an active SRE sale process, buyer correspondence, or DD-stage proposal framing is **superseded**. The SRE sale process ended 2026-05-26. Customer-facing proposals are unaffected; only sale-process-as-context language is reframed. See [`docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10`](../../../docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10).
+
 Codifies the canonical SRE proposal authoring workflow — same structure used by Maaz's SulfurBot Proposals GPT, ported to a Claude skill so it composes with the audit + routine-author + email-drafter skills.
 
 This skill is **draft-only**. It produces proposal content in the SRE structure, ready for operator review and editing. It never sends, never auto-saves to a customer-facing location, never bypasses the human-in-loop review.

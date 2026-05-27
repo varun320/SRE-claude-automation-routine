@@ -1,5 +1,7 @@
 # Stage 0 — Discovery Questionnaire (PRE-FILLED)
 
+> **⚠️ DECISION OVERRIDE 2026-05-26:** Any inferred answer mentioning "sale process" or treating "buyer Q&A / data room / IM revision" as live is **superseded** by [`docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10`](../../docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10). The SRE sale process ended 2026-05-26. SRE DD folder confidentiality remains in force under the broader framing *"Sensitive corporate / financial / HR / board material."*
+
 **Status.** Every question below carries an **INFERRED ANSWER** derived from `SRE Claude Routines - Execution Plan.md` and standard practice in the sulfur-recovery / oil-and-gas EPC industry. Answers are tagged:
 
 - 🟢 **CONFIRMED** — taken verbatim from the Execution Plan

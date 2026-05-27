@@ -5,6 +5,8 @@ description: Draft emails in Maaz's voice for Sulfur Recovery Engineering's comm
 
 # SRE Email Drafter
 
+> **⚠️ DECISION OVERRIDE 2026-05-26:** Templates, examples, or guidance below that mention an "active sale process", "sale-process buyer", "DD buyer correspondence", or related framing are **superseded**. The SRE sale process ended 2026-05-26. Generic confidentiality framing — *"Sensitive corporate / financial / HR / board material — never surface in any output"* — applies. See [`docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10`](../../../docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10).
+
 Maaz writes a particular kind of email — short, technically precise, signed `Maaz Ahmed Shareef · Sulfur Recovery Engineering Inc.`, often routed via AIMS contacts for ME customers, frequently following the pattern *"DRAFT for your approval - <customer> - <topic>"* when the email is itself a draft sent to AIMS for review before it goes to end-customer. This skill codifies that voice and the common scenarios into reusable templates.
 
 This skill is **draft-only**. It produces email content in Outlook-draft format. Sending happens only after operator review.

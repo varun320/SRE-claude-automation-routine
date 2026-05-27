@@ -4,6 +4,8 @@
 **Anchored to:** SRE Weekly Operating System (Calgary MT, prayer + sleep aware)
 **Scope:** SRE only. Other businesses (Shaghf, Mechways, etc.) deferred to a separate plan.
 
+> **⚠️ DECISION OVERRIDE 2026-05-26:** The SRE sale process has ended. Wherever this plan says "sale process", "sale-process buyer", or "Sale-Process Memo" (R9), reframe as **"Sensitive corporate / financial / HR / board material — never surface in any output."** R9's purpose remains valid (weekly written memo of the highest-stakes file) but its topic shifts to whatever IS the highest-stakes file at the time — no longer assumed to be the sale. See [`docs/decisions/2026-05-26-maaz-phase1-decisions.md`](docs/decisions/2026-05-26-maaz-phase1-decisions.md) sections D9 and D10 for the authoritative reframe and cadence reality (Thu 10:00 Bi-Weekly Job, weekly Maaz↔Torstein 1:1, Monthly Pitstop).
+
 ---
 
 ## How to Read This Plan

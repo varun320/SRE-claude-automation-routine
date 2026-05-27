@@ -1,5 +1,7 @@
 # Stage 10 — Dashboards Catalog
 
+> **⚠️ DECISION OVERRIDE 2026-05-26:** Where this catalog mentions "R9 (Sale-Process Memo)" or treats sale-process tracking as an audience for any dashboard, that framing is superseded. See [`docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10`](../../docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10).
+
 **Purpose.** Specify the HTML dashboards the audit ships. Each dashboard is a **single self-contained HTML file with the data inlined** (same pattern as GHL: payload embedded in a `<script>` block, dark-theme CSS in `<style>`, drill-down interaction via vanilla JS — no backend required).
 
 **Pre-requisite.** Stages 8 + 9 produced `customer-360.json`, `sales-pipeline.json`, `ar-aging.json`, the various `*-analysis.json` files, and `findings.json`.
