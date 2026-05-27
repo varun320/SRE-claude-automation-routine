@@ -58,7 +58,7 @@ Key audit insights baked into Phase 1 specs:
 - **Full-mailbox-access to dongreen@ + inshanm@ + info@** → R1/R5 require `toRecipients_filter` to avoid cross-mailbox pollution (OQ-16).
 - **Day Clock mismatch** (planned 14:05 Mon-Fri 1:1s don't exist as observed events) → R2 + R8 must surface drift, not assume conformity.
 - **AIMS roster** (21+ contacts mapped, far more than execution plan's 7) → R5's filter list updated to reflect reality.
-- **Sale-process redaction** (SRE DD folder + Torstein 1:1s) → all Phase 1 outputs default to operator-private channel.
+- **Confidentiality redaction** (SRE DD folder + Torstein 1:1 + P&L + board material — per [D10](../docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10)) → all Phase 1 outputs default to operator-private channel. SRE sale process ended 2026-05-26; the broader "sensitive corporate / financial / HR / board" framing now drives redaction.
 
 ## Directory structure
 

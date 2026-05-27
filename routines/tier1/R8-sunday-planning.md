@@ -8,13 +8,18 @@ tier: 1
 phase: 1
 connectors: [ms365, filesystem]
 ms365_scopes: [Mail.Read, Calendars.Read, Files.Read.All]
-output: notification
+output: webapp_queue + onedrive_markdown                # per D11
 safety: read-only, no drafts, recommendation-only, ≤400 words
 window: "next 7 days calendar + last 7 days R4 logs (when R4 ships) + Action Package"
 linked_audit_findings:
   - "audits/sre-2026-05-21/data/stage-2-to-7-summary.json#openQuestions.OQ-18"   # Day Clock mismatch (planned vs observed)
   - "audits/sre-2026-05-21/raw/tenant/mailbox-settings-maaz.json"               # working_hours + timezone
   - "audits/sre-2026-05-21/raw/calendar/calendar-2yr-aggregate.json"            # observed recurring meetings (Thu Bi-Weekly Job, Torstein 1:1)
+linked_decisions:
+  - "docs/decisions/2026-05-26-maaz-phase1-decisions.md#d7"   # all 10 shared mailboxes in weekly sweep
+  - "docs/decisions/2026-05-26-maaz-phase1-decisions.md#d9"   # cadence = observed reality (Thu 10:00 Bi-Weekly, Maaz↔Torstein, Monthly Pitstop)
+  - "docs/decisions/2026-05-26-maaz-phase1-decisions.md#d10"  # confidentiality reframe
+  - "docs/decisions/2026-05-26-maaz-phase1-decisions.md#d11"  # webapp + OneDrive output
 ---
 
 # R8 — Sunday Weekly Planning Slot
@@ -32,9 +37,9 @@ linked_audit_findings:
 > It's Sunday 16:00 America/Edmonton. Build my Week of [next Mon date] planning brief.
 >
 > Pull from:
-> - **Outlook inbox state** — count unread by NA / ME split (NA = customers in Canada/US/EU outside Middle East; ME = AIMS + Aramco/ADNOC/Q-Chem/Petro-Rabigh/KNPC/SATORP/Qatar Energy/JIGPC/BSE/BAPCO/Mellitah/Orlen). Oldest unactioned thread per side (subject + sender + age in days).
-> - **Outlook calendar next 7 days** — list every meeting with attendees. Flag any meeting whose start/end crosses: Zuhr (~14:00), Asr (~19:00), Maghrib (~21:00), Isha (~22:15), Friday Jumua (14:00–15:30), or family time (17:00–22:00). Flag any meeting > 90 min that doesn't have an explicit break.
-> - **Project Tracker** + **Action Package** at `/Users/maazwork/Documents/Claude/Projects/SRE General Manager/` — propose Monday's Top 3 candidates tied to CEO/Sale-Process theme (Monday = sale day).
+> - **Outlook inbox state across all 10 active shared mailboxes (per D7) + Maaz's mailbox** — count unread by NA / ME split (NA = customers in Canada/US/EU outside Middle East; ME = AIMS + Aramco/ADNOC/Q-Chem/Petro-Rabigh/KNPC/SATORP/Qatar Energy/JIGPC/BSE/BAPCO/Mellitah/Orlen). Per mailbox: oldest unactioned thread (subject + sender + age in days). Mailboxes in scope: `maaz@`, `info@`, `info-me@`, `ar@`, `ap@`, `sales@`, `careers@`, `apple@`, `HusamsBookingPageSRE@`, `boardroom@`. Disabled scanner mailbox excluded.
+> - **Outlook calendar next 7 days** — list every meeting with attendees. Flag any meeting whose start/end crosses: Zuhr (~14:00), Asr (~19:00), Maghrib (~21:00), Isha (~22:15), Friday Jumua (14:00–15:30), or family time (17:00–22:00). Flag any meeting > 90 min that doesn't have an explicit break. Cross-check against observed standing cadence (per D9): Thursday 10:00 MT Bi-Weekly Job, weekly Maaz ↔ Torstein 1:1, Monthly Pitstop.
+> - **Project Tracker** + **Action Package** at `/Users/maazwork/Documents/Claude/Projects/SRE General Manager/` — propose Monday's Top 3 candidates tied to CEO/Strategic theme (Monday = strategic deep-work day).
 > - **Prior week's R4 daily logs** at `Daily Logs/[Mon-Fri].md` (when R4 ships) — surface anything that slipped Mon→Fri last week that needs to land this week.
 > - **Thank-you note rotation** — pick exactly one person from this week's interactions whom Maaz should thank in writing. Rotate through: a client, a partner, a teammate. Track the rotation across weeks (Sun N picked client → Sun N+1 pick partner → Sun N+2 pick teammate → repeat).
 >
@@ -62,16 +67,16 @@ linked_audit_findings:
 > - Thu 17:30 "Bi-Weekly Job Meeting overflow" runs into family time → cap at 17:00
 > - Fri 14:00 "INERCO follow-up" crosses Jumua → reschedule
 >
-> 🎯 Monday Top 3 (CEO/Sale-Process):
+> 🎯 Monday Top 3 (CEO/Strategic):
 > 1. Anwil NDA v3 review — output: signed-off draft to legal · 12:20–12:50
-> 2. DD-tracker reconciliation w/ Torstein-call notes · 12:55–13:35
+> 2. [confidential strategic item] · 12:55–13:35
 > 3. Q-Chem follow-up to Sanjay Bhatt · 13:35–13:55
 >
 > 🙏 Thank-you note: **Bader Ansari (AIMS)** — for closing Q-Chem proposal review at speed
 >
 > ⚠️ #1 risk: **Aramco RTR May-31 review prep** — Dharmesh out Tue-Wed; backfill engineering scope before then.
 
-Delivered to: same channel as R1.
+**Delivery (per D11):** webapp queue at `/queue/R8/{YYYY-MM-DD}.md` + OneDrive mirror at `OneDrive/SRE Routines/R8-sunday-planning/{YYYY-MM-DD}.md`. Fallback during webapp build: Teams chat with self.
 
 ---
 
@@ -93,7 +98,7 @@ Delivered to: same channel as R1.
 - **Long holiday weeks (Eid, Christmas, Canadian Thanksgiving):** the brief should be shorter and flag "holiday week — short cadence" instead of treating it as normal.
 - **First Sunday of fiscal month:** Action Package usually rotates monthly — confirm the routine reads the *current month's* Action Package.
 - **No R4 history available:** for the first 2-3 weeks of pilot before R4 ships, the "what slipped last week" section is empty — annotate "R4 not yet shipped" rather than fabricate slippage.
-- **Sale-process redaction:** if Monday's Top 3 references Torstein 1:1 / SRE DD / sale-process buyer, the output must be in operator-private channel only (not a Teams team channel). Always defaults to Outlook self-DM.
+- **Confidentiality redaction (per D10):** if Monday's Top 3 references Torstein 1:1, SRE DD folder content, P&L, or board-prep material, the output must replace the subject with `[confidential strategic item]` and surface only the time block — never the topic. Output always goes to operator-private channel (webapp queue + OneDrive), never a Teams team channel.
 - **Calendar-conflict false positives:** a "Pre-Meet" meeting at 13:30 isn't a conflict with Zuhr 14:00 — it just ends before. Don't flag.
 - **AIMS-call nights:** Sun–Wed 22:00 has bi-weekly AIMS country calls. The brief should note which country's call is *next* week so Maaz can pre-block the prep.
 
