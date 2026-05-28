@@ -221,8 +221,60 @@ The folder remains confidential because it contains DD-grade financial, HR, and 
 
 ---
 
+## Supplementary decisions (2026-05-27) — M1–M5 follow-up
+
+After the 2026-05-26 answers landed, Mohammad surfaced 5 follow-up items in the "What Maaz needs to do" section of the audit response. Resolved 2026-05-27.
+
+### M1 — Azure "Allow public client flows"
+**Decision:** Already enabled. No action required.
+
+### M2 — Webapp hosting + domain
+**Decision:** **Vercel free tier**, on a domain separate from `sulfurrecovery.com`.
+
+- **Start:** `*.vercel.app` default — zero DNS, instant.
+- **Optional W7:** migrate to `routines.callreceptionist.ai` (Mohammad-owned subdomain) once the pilot is stable.
+- **Not** on `sulfurrecovery.com` — routines is Mohammad's deliverable to Maaz, not SRE IT. Boundary hygiene.
+
+**Why over Azure Static Web Apps (the v0 proposal):**
+- Same free-tier economics, comparable performance.
+- Mohammad's likely toolchain favors Vercel DX.
+- Hosting outside `sulfurrecovery.com` keeps the webapp decoupled from SRE infrastructure choices.
+
+Auth model is unaffected — Entra ID SSO from a non-Microsoft-owned domain is the same pattern Slack/Notion/etc. use every day.
+
+### M3 — Webapp readers
+**Decision:** **Maaz + Mohammad**. Both authenticate via Entra ID SSO.
+
+**Mechanism:** Mohammad joins as a **guest user** in Maaz's tenant; Maaz shares the `/SRE Routines/` OneDrive folder with him. Single Entra app, single redirect-URI set, one code path. Maaz signs in as a member, Mohammad as a guest — same MSAL flow, different `oid`.
+
+**Per-reader cursor:** "unread" state is local-storage per reader, not a shared global.
+
+Alternative (multi-tenant Entra app) rejected because Mohammad signing in with his own `callreceptionist.ai` identity would only see his own OneDrive, not Maaz's. Guest-user pattern is the cleaner path.
+
+### M4 — OneDrive root path
+**Decision:** `/SRE Routines/` (default). Sub-folders per routine: `/SRE Routines/R1-na-inbox-scan/`, `/R2-daily-setup/`, `/R5-me-inbox-scan/`, `/R8-sunday-planning/`. Index manifest at `/SRE Routines/_index.jsonl`.
+
+### M5 — Talha + post-Nov 2025 hires
+**Decision:** **Deferred.** Not blocking Phase 1 pilot. Reconcile at next org-chart refresh cycle. Tracked as OPEN-B in the table below.
+
+---
+
+## Open items — updated status (2026-05-27)
+
+| ID | Description | Status |
+|---|---|---|
+| OPEN-A | Inshan MS account state vs HR | open — blocks R1 first fire |
+| OPEN-B | Talha + post-Nov 2025 hires confirmation | open — deferred per M5 |
+| OPEN-C | Zoho cleanup sweep | done 2026-05-26 (no Zoho refs in routines/runbook) |
+| OPEN-D | Sale-process reframe across docs | done 2026-05-26 (banners + client-config updated) |
+| OPEN-E | Webapp scoping (auth, hosting, data) | resolved 2026-05-27 via M1–M4 + webapp plan v0.1 |
+| OPEN-F (new) | Run all 5 prompts in `connectors/connector-check.md` + append logbook entry | open |
+| OPEN-G (new) | Confirm with `/schedule` how cloud agents authenticate to MS365 MCP (token vs confidential client vs other) | open — blocks any routine going live as cloud cron |
+| OPEN-H (new) | Smoke-test `mcp__ms365__move-mail-message` on one LinkedIn message + revert | open — blocks R1/R5 auto-archive enable |
+
 ## Provenance
 
 - **Question doc** (Mohammad → Maaz): generated 2026-05-22 by `scripts/generate-maaz-questions-docx.py` from audit `stage-2-to-7-summary.json` Open Questions.
 - **Answer doc** (Maaz → Mohammad): `Maaz-Routine-Approval-Answers.docx`, dated 2026-05-26.
+- **M1–M5 supplementary answers**: chat response 2026-05-27.
 - **Audit base:** `audits/sre-2026-05-21/` (gitignored — local-only).
