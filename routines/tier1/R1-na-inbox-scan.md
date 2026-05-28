@@ -24,6 +24,7 @@ linked_decisions:
   - "docs/decisions/2026-05-26-maaz-phase1-decisions.md#d11"  # webapp + OneDrive output
 linked_findings:
   - "docs/dry-run-findings/R1-2026-05-28.md"                  # Fix-1 (LLM ARCHIVE bucket) + Fix-2 (BCC fallback) origin
+  - "docs/dry-run-findings/OPEN-L-alias-investigation-2026-05-28.md"   # confirms R1's narrow scope is by-design per Q6/D6, NOT a bug
 ---
 
 # R1 — NA Inbox Scan (subjects only)
@@ -45,6 +46,8 @@ linked_findings:
 > **Cross-mailbox pollution filter (audit OQ-16, mandatory):** for each message in the window, keep it only if ONE of these is true:
 > 1. `toRecipients` includes at least one of: `maaz@sulfurrecovery.com`, `info@sulfurrecovery.com`, `info-me@sulfurrecovery.com`. OR
 > 2. **BCC fallback (per Fix-2 from dry-run-findings R1-2026-05-28):** `toRecipients` is empty AND the message lives in Maaz's primary mailbox/folder (i.e., the message was delivered to Maaz via BCC — common for ME-customer portals, tender platforms, and some vendor systems). Annotate `[via BCC]` on its summary line.
+>
+> **Note (per OPEN-L 2026-05-28):** R1's keep-list is intentionally narrower than R5's (R5 covers all 10 mailboxes per D7). The narrow R1 scope is by design per Q6/D6 — Maaz's morning summary stays focused on `maaz@ + info@ + info-me@` even when mail addressed to other SRE mailboxes (e.g., `sales@`, `HusamsBookingPageSRE@`) auto-forwards into Maaz's primary. Those items get caught by R5's evening sweep, not R1's morning scan.
 >
 > Drop everything else. Do not surface, do not classify, do not log.
 >

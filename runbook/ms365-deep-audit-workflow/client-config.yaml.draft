@@ -64,17 +64,97 @@ aims_partners:                                # AIMS members (likely tenant gues
   - { name: "Fazal" }
   - { name: "Majid" }
 
-shared_mailboxes:                             # 🟢 per D7 — all 10, last one disabled (excluded from live sweep)
-  - { address: "ar@sulfurrecovery.com",            purpose: "accounts receivable" }
-  - { address: "ap@sulfurrecovery.com",            purpose: "accounts payable" }
-  - { address: "info@sulfurrecovery.com",          purpose: "company-wide signal" }
-  - { address: "info-me@sulfurrecovery.com",       purpose: "Middle East regional signal" }
-  - { address: "sales@sulfurrecovery.com",         purpose: "sales inbox" }
-  - { address: "careers@sulfurrecovery.com",       purpose: "hiring" }
-  - { address: "apple@sulfurrecovery.com",         purpose: "apple-ecosystem device coordination" }
-  - { address: "HusamsBookingPageSRE@sulfurrecovery.com", purpose: "booking page" }
-  - { address: "boardroom@sulfurrecovery.com",     purpose: "board / governance" }
-  - { address: "scanner@sulfurrecovery.com",       purpose: "legacy scanner mailbox", status: "disabled", excluded_from_live_sweep: true }
+shared_mailboxes:                             # 🟢 per D7, corrected by OPEN-L 2026-05-28
+  # Verified 2026-05-28 via Graph directory lookup (proxyAddresses) + live send test.
+  # ALL are SEPARATE user mailbox objects — NOT aliases on Maaz's primary.
+  # Earlier R5-2026-05-28 "alias on Maaz" hypothesis was wrong; see
+  # docs/dry-run-findings/OPEN-L-alias-investigation-2026-05-28.md.
+  #
+  # Fields per entry:
+  #   address                      — the canonical SMTP address
+  #   purpose                      — operational role
+  #   directory_state              — accountEnabled per Graph (2026-05-28 snapshot)
+  #   graph_endpoint               — which MCP tool successfully reads it
+  #   auto_forwards_to_maaz        — does mail to this address appear in maaz@'s inbox?
+  #                                   verified=tested 2026-05-28; unknown=needs ar@/ap@ live test
+  #   active_for_r5_sweep          — included in R5's per-mailbox enumeration?
+
+  - address: "info@sulfurrecovery.com"
+    purpose: "company-wide signal"
+    directory_state: enabled
+    graph_endpoint: list-shared-mailbox-messages       # works directly
+    auto_forwards_to_maaz: unknown                     # has its own traffic; some items co-appear in Maaz's view
+    active_for_r5_sweep: true
+
+  - address: "info-me@sulfurrecovery.com"
+    purpose: "Middle East regional signal"
+    directory_state: enabled
+    graph_endpoint: list-mail-messages_fallback        # returns 404 on shared-mailbox path; needs fallback
+    auto_forwards_to_maaz: unknown
+    active_for_r5_sweep: true
+
+  - address: "careers@sulfurrecovery.com"
+    purpose: "hiring"
+    directory_state: enabled
+    graph_endpoint: list-shared-mailbox-messages       # works directly
+    auto_forwards_to_maaz: unknown
+    active_for_r5_sweep: true
+
+  - address: "ar@sulfurrecovery.com"
+    purpose: "accounts receivable"
+    directory_state: enabled
+    graph_endpoint: list-mail-messages_fallback        # returns 404 on shared-mailbox path; needs fallback
+    auto_forwards_to_maaz: unknown                     # classifier blocked the 2026-05-28 send test
+    active_for_r5_sweep: true
+
+  - address: "ap@sulfurrecovery.com"
+    purpose: "accounts payable"
+    directory_state: enabled
+    graph_endpoint: list-mail-messages_fallback
+    auto_forwards_to_maaz: unknown                     # classifier blocked the 2026-05-28 send test
+    active_for_r5_sweep: true
+
+  - address: "sales@sulfurrecovery.com"
+    purpose: "sales inbox"
+    directory_state: enabled
+    graph_endpoint: list-mail-messages_fallback
+    auto_forwards_to_maaz: verified_yes                # 2026-05-28 test mail arrived in Maaz primary in ~33min
+    active_for_r5_sweep: true
+
+  - address: "apple@sulfurrecovery.com"
+    purpose: "apple-ecosystem device coordination"
+    directory_state: enabled
+    graph_endpoint: list-mail-messages_fallback
+    auto_forwards_to_maaz: verified_no                 # 2026-05-28 test mail NOT in Maaz primary after 38min
+    active_for_r5_sweep: true
+
+  - address: "HusamsBookingPageSRE@sulfurrecovery.com"
+    purpose: "booking page"
+    directory_state: enabled
+    graph_endpoint: list-mail-messages_fallback
+    auto_forwards_to_maaz: verified_yes                # 2026-05-28 test mail arrived in Maaz primary in ~38min
+    active_for_r5_sweep: true
+
+  - address: "boardroom@sulfurrecovery.com"
+    purpose: "board / governance — CONFIDENTIAL per D10"
+    directory_state: enabled
+    graph_endpoint: list-mail-messages_fallback
+    auto_forwards_to_maaz: unknown
+    active_for_r5_sweep: false                         # 🟢 D10 — board material never surfaces, querying it would risk leakage
+
+  - address: "scanner@sulfurrecovery.com"
+    purpose: "scanner mailbox"
+    directory_state: enabled                           # 🟡 NOTE: D7 said "disabled" but Graph 2026-05-28 says enabled. Maaz may want to revisit.
+    graph_endpoint: unknown
+    auto_forwards_to_maaz: unknown
+    active_for_r5_sweep: false                         # excluded per D7 "not actively swept"
+
+# Husam's mailbox (husam@sulfurrecovery.com) is `accountEnabled: false` per directory
+# (Husam left). Not in R5 scope. Listed here for completeness.
+inactive_mailboxes:
+  - address: "husam@sulfurrecovery.com"
+    purpose: "Husam Alrameeni — departed"
+    directory_state: disabled
 
 excluded_users: []                            # 🔴
 

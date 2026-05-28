@@ -27,6 +27,8 @@ linked_decisions:
   - "docs/decisions/2026-05-26-maaz-phase1-decisions.md#d11"  # webapp + OneDrive output
 linked_findings:
   - "docs/dry-run-findings/R1-2026-05-28.md"                  # Fix-1 (LLM ARCHIVE bucket) + Fix-2 (BCC fallback) — mirrored from R1
+  - "docs/dry-run-findings/R5-2026-05-28.md"                  # initial R5 dry-run — supplemented by OPEN-L below
+  - "docs/dry-run-findings/OPEN-L-alias-investigation-2026-05-28.md"   # corrects R5-2026-05-28: all 11 are separate mailboxes, not aliases
 ---
 
 # R5 — ME Inbox Scan (subjects only)
@@ -43,17 +45,45 @@ linked_findings:
 
 > Scan inbound mail and Teams DMs received since 15:35 today America/Edmonton time.
 >
-> **Inbox scope (per D6 + D7):** Maaz's mailbox + `info@sulfurrecovery.com` + `info-me@sulfurrecovery.com` + the 7 other active shared mailboxes (`ar@`, `ap@`, `sales@`, `careers@`, `apple@`, `HusamsBookingPageSRE@`, `boardroom@`). The disabled scanner mailbox stays excluded. For shared mailboxes other than info@ / info-me@, only surface items that are ME-relevant (filter below). Don's and Inshan's personal mailboxes are explicitly OUT of scope.
+> **Inbox scope (per D7, corrected by OPEN-L 2026-05-28):** all 10 active mailboxes — Maaz's primary + 9 shared mailboxes that the OPEN-L directory lookup confirmed are SEPARATE user mailbox objects (not aliases on Maaz):
+>
+> ```
+> maaz@, info@, info-me@, careers@, ar@, ap@, sales@, apple@,
+> boardroom@, HusamsBookingPageSRE@
+> ```
+>
+> Scanner@ stays excluded per D7 ("not actively swept"). Don's and Inshan's mailboxes are out of scope. Disabled Husam mailbox is out of scope.
+>
+> **Per-mailbox query plan with 404 tolerance (per Fix-5-revised + Fix-7 from OPEN-L 2026-05-28):**
+>
+> For each in-scope mailbox, attempt to read messages in the window:
+> 1. First try `mcp__ms365__list-shared-mailbox-messages` with `userId` = mailbox address.
+> 2. If response is `404 ErrorItemNotFound — Default folder AllItems not found`, fall back to `mcp__ms365__list-mail-messages` with `userId` = the same address (different Graph endpoint path).
+> 3. If still 404 or any other access error, log a skip line in today's run log with reason (`mailbox_empty`, `delegation_missing`, `unknown_error`) and continue to the next mailbox. Do NOT abort the routine on a single-mailbox failure.
+> 4. Record per-mailbox state: `OK / OK_fallback / SKIP_404 / SKIP_other` in the summary frontmatter.
+>
+> Known state from OPEN-L verification 2026-05-28:
+> - `info@`, `careers@` — work via `list-shared-mailbox-messages`. Use directly.
+> - `maaz@` — primary, always works via `list-mail-folder-messages` on `inbox`.
+> - The other 7 — returned 404 on `list-shared-mailbox-messages`; try fallback before logging skip.
 >
 > **Filter to ME-relevant traffic:**
 > - **AIMS contacts** (any `@aimsgt.com` sender, including: Shameem, Maaz Khan, Bader Ansari, Mohammed Fazal, Junaid Muhammad E, Ali Albader, Zaheer Juddy, Mohammed Yunus, Naveed Hussain, Ahmad Patel, Ravi Srinivas, Sateesh D, Vahib Saleem, Muhammad Bilal, Hameed, Girish, plus tenant guests: a.shaikh, abrar, arahman, azad, khayaz)
 > - **ME customer domains/keywords:** Aramco (aramco.com), ADNOC (adnoc.ae), Q-Chem, Petro Rabigh, KNPC, Tüpraş, SATORP, Qatar Energy, QE-LNG, JIGPC, BSE/BAPCO, KOC, ERIELL, Anwil/Orlen, Mellitah/Dolphin, Kanoo, Baker Hughes, PrefChem (prefchem.com.my)
 >
-> **Cross-mailbox pollution filter (audit OQ-16, mandatory):** for each message in the window, keep it only if ONE of these is true:
-> 1. `toRecipients` includes at least one of: `maaz@`, `info@`, `info-me@`, OR the shared mailbox currently being scanned. OR
-> 2. **BCC fallback (per Fix-2 from dry-run-findings R1-2026-05-28):** `toRecipients` is empty AND the message lives in Maaz's primary mailbox or in the shared mailbox being scanned (BCC pattern — common for ME-customer portals like PrefChem and tender platforms like Orlen Connect, Ariba). Annotate `[via BCC]` on its summary line.
+> Apply this filter to all surfacing mailboxes EXCEPT `info@` and `info-me@`, which surface their full traffic (after the cross-mailbox + ARCHIVE passes below).
 >
-> Drop everything else.
+> **Cross-mailbox pollution filter (audit OQ-16 + Fix-4-revised from OPEN-L) — keep-list expanded to the full active roster:**
+>
+> For each message in the merged result, keep it only if ONE of these is true:
+> 1. `toRecipients` includes at least one of: `maaz@`, `info@`, `info-me@`, `careers@`, `ar@`, `ap@`, `sales@`, `apple@`, `boardroom@`, `HusamsBookingPageSRE@`. OR
+> 2. **BCC fallback (Fix-2):** `toRecipients` is empty AND the message lives in one of the in-scope mailboxes (BCC pattern — common for ME-customer portals like PrefChem and tender platforms like Orlen Connect, Ariba). Annotate `[via BCC]` on its summary line.
+>
+> Drop everything else (Don's mail, Inshan's mail, Husam's mail, external BCC-to-self patterns that landed outside the in-scope set).
+>
+> **Dedup pass (Fix-6 from R5 dry-run 2026-05-28):**
+>
+> After merging messages from all queried mailboxes, dedupe by `internetMessageId` (preferred) or fallback `(senderAddress, subject, receivedDateTime ± 60s)`. If a message appears in 2+ mailboxes (e.g., auto-forwarded from sales@ to Maaz's primary), keep ONE copy and prefer the source-of-record mailbox in this priority: original-recipient-mailbox > info@ > Maaz's primary. Note the dedup count in the summary frontmatter.
 >
 > **Bucket pass (per D5, implementation revised per Fix-1) — every survivor gets exactly ONE of four labels:**
 >
@@ -128,7 +158,9 @@ Archive log lives at `routines/logs/runs/R5-{YYYY-MM-DD}-archive.md` — operato
 - [ ] R5 fires on schedule without intervention
 - [ ] Output matched constraints (no drafts, no over-reach, surfaced ≤200 words)
 - [ ] **ARCHIVE bucket precision ≥100% over first 25 dry-run classifications** — zero false-positives across AIMS / ME-customer / shared-mailbox sources, then operator flips `dry_run: false`
+- [ ] **Per-mailbox accessibility** — every fire records OK / OK_fallback / SKIP_404 / SKIP_other for all 10 in-scope mailboxes; any SKIP needs a logged reason
+- [ ] **Dedup working** — internetMessageId dedup count > 0 on at least one fire (proves messages are being deduplicated across overlapping mailbox views)
 - [ ] No noise senders (LinkedIn, alarm.com, generic vendor blasts) in RED/AMBER/GREEN across 10 fires
-- [ ] No cross-mailbox pollution — every surfaced item satisfies direct-to OR BCC-fallback rule with annotation
+- [ ] No cross-mailbox pollution — every surfaced item satisfies the expanded D6 keep-list OR BCC fallback with annotation
 - [ ] Confidentiality reframe verified — no DD / Torstein / board subjects leak into surfaced buckets
 - [ ] One full Sun–Thu cycle (5 fires) completed cleanly
