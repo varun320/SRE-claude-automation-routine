@@ -263,14 +263,17 @@ Alternative (multi-tenant Entra app) rejected because Mohammad signing in with h
 
 | ID | Description | Status |
 |---|---|---|
-| OPEN-A | Inshan MS account state vs HR | open — blocks R1 first fire |
+| OPEN-A | Inshan MS account state vs HR | **resolved 2026-05-27** via direct Graph lookup — `accountEnabled: false`, `assignedLicenses: []`, account already disabled. Only residual: stale `jobTitle: "Principal Process Engineer"` (Dharmesh holds that title now). Not blocking — routines don't read jobTitle. |
 | OPEN-B | Talha + post-Nov 2025 hires confirmation | open — deferred per M5 |
 | OPEN-C | Zoho cleanup sweep | done 2026-05-26 (no Zoho refs in routines/runbook) |
 | OPEN-D | Sale-process reframe across docs | done 2026-05-26 (banners + client-config updated) |
 | OPEN-E | Webapp scoping (auth, hosting, data) | resolved 2026-05-27 via M1–M4 + webapp plan v0.1 |
-| OPEN-F (new) | Run all 5 prompts in `connectors/connector-check.md` + append logbook entry | open |
-| OPEN-G (new) | Confirm with `/schedule` how cloud agents authenticate to MS365 MCP (token vs confidential client vs other) | open — blocks any routine going live as cloud cron |
-| OPEN-H (new) | Smoke-test `mcp__ms365__move-mail-message` on one LinkedIn message + revert | open — blocks R1/R5 auto-archive enable |
+| OPEN-F | Run all 5 prompts in `connectors/connector-check.md` + append logbook entry | open — soft prereq |
+| OPEN-G | Confirm with `/schedule` how cloud agents authenticate to MS365 MCP | **resolved 2026-05-27** via `schedule` skill invocation — cloud agent uses claude.ai connector marketplace (not local token cache). User confirmed MS365 is available in marketplace. Connect at https://claude.ai/customize/connectors before cloud-cron registration. |
+| OPEN-H | Smoke-test `mcp__ms365__move-mail-message` | open — gated behind dry-run pass + cloud connector setup |
+| OPEN-I (new) | Inshan `jobTitle` stale (residual from OPEN-A) | open — non-blocking cleanup |
+| OPEN-J (new) | Cron UTC conversion for R1/R2/R5/R8 + DST handling | open — needed at cloud-cron registration time |
+| OPEN-K (new) | Connect MS365 + install Claude GitHub App for varun320/SRE-claude-automation-routine | open — hard prereq for cloud cron, see dry-run-runbook §"After a clean dry-run pass" |
 
 ## Provenance
 
